@@ -1,0 +1,62 @@
+class Train
+types
+
+values
+-- TODO Define values here
+instance variables
+	private static lastTrainId: nat := 0;
+	private trainId: nat;
+	private moving: bool;
+	private direction: bool;
+
+operations
+
+	/*
+	 * Train constructor.
+	 *
+	 * @param movingIn - the state of the train (moving or stopped)
+	 * 
+	 * @return Train with auto-incremental id and the moving state set to the param value
+	 */
+
+	public Train : bool * bool ==> Train
+	Train(movingIn,directionIn) == (
+		moving := movingIn;
+		direction := directionIn;
+		trainId := lastTrainId;
+		lastTrainId := lastTrainId + 1;
+		return self
+	);
+	
+	
+	/*
+	 * Getter for the Train ID.
+	 *
+	 * @return train id
+	 */
+	public getId : () ==> nat
+	getId() == return self.trainId;
+	
+		/*
+	 * Getter for the Train direction.
+	 *
+	 * @return train direction
+	 */
+	public getDirection : () ==> bool
+	getDirection() == return self.direction;
+	
+	
+	/*
+	 * Getter for the moving state of the train.
+	 *
+	 * @return the moving state of the train
+	 */
+	public getState : () ==> bool
+	getState() == return self.moving;
+
+
+functions
+-- TODO Define functiones here
+traces
+-- TODO Define Combinatorial Test Traces here
+end Train

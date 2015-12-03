@@ -1,0 +1,21 @@
+class Track
+/*
+  Defines a sequence of blocks.
+  FEUP, MFES, 2015/16.
+*/
+types
+	
+	
+values
+-- TODO Define values here
+instance variables
+	private diretion1: seq of Block;
+	private diretion2: seq of Block;
+
+operations
+-- TODO Define operations here
+functions
+-- TODO Define functiones here
+traces
+-- TODO Define Combinatorial Test Traces here
+end Track
