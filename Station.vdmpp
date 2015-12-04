@@ -8,24 +8,31 @@ types
 values
 -- TODO Define values here
 instance variables
-	private block1 : Block;
-	private block2 : Block; 
+	private stationId: nat;
 
 operations
 	
 	/*
 	 * Station constructor.
 	 *
-	 * @param block1in - one of the parallel blocks
-	 * @param block2in - the other block
+	 * @param id - id of the station
 	 *
 	 * @return station
 	 */
-	public Station : Block * Block ==> Station
-	Station(block1in,block2in) == (
-		block1 := block1in;
-		block2 := block2in;
+	public Station : nat ==> Station
+	Station(id) == (
+		stationId := id;
 		return self
+	);
+	
+	/*
+	 * Getter for the Station ID.
+	 *
+	 * @return station id
+	 */
+	public getId : () ==> nat
+	getId() == (
+		return self.stationId;
 	);
 	
 

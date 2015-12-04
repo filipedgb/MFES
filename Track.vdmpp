@@ -40,6 +40,12 @@ operations
 		return self.direction2;
 	);
 	
+	public getNextDir1 : Block ==> Block
+	getNextDir1(currentBlock) == (
+	
+	
+	);
+	
 
 
 functions

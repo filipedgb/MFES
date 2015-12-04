@@ -21,6 +21,8 @@ operations
 	public testCreateTrack: () ==> ()
 	testCreateTrack() == (
     
+    dcl s1: Station := new Station(1);
+    
     dcl p1: Block := new Block(<YELLOW>,<YELLOW>);
     dcl p2: Block := new Block(<YELLOW>,<YELLOW>);
     dcl p3: Block := new Block(<YELLOW>,<YELLOW>);
@@ -32,8 +34,16 @@ operations
   			[p1,p2,p3,p5,p6],[p6,p5,p4,p2,p1]
   	);
   	
+  	dcl t1: Train := new Train(true,true);
+  	dcl t2: Train := new Train(true,false);
+  	 	  
+  	p3.setStation(s1);
+    p4.setStation(s1);
+  	
   	assertEqual(5,len track.getDirection1Seq());
    	assertEqual(5,len track.getDirection2Seq());
+   	assertEqual(s1, p3.getStation());
+   	
   
   );
 	

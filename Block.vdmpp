@@ -12,6 +12,7 @@ instance variables
 	private semaphoreState1: Semaphore;
 	private semaphoreState2: Semaphore;
 	private currentTrain: [Train] := nil;
+	private station: [Station] := nil;
 
 operations
 	
@@ -20,7 +21,7 @@ operations
 	 *
 	 * @param semaphoreStateIn1 - the state of the semaphore1
 	 * @param semaphoreStateIn2 - the state of the semaphore2
-	 * @param trackIn - the track this block belongs to
+	 * @param stationIn - the station this block belongs to (if any)
 	 *
 	 * @return Train with auto-incremental id and the moving state set to the param value
 	 */
@@ -47,6 +48,24 @@ operations
 	 */
 	public getSemaphore2 : () ==> Semaphore
 	getSemaphore2() == return self.semaphoreState2;
+	
+	/*
+	 * Setter for the station.
+	 *
+	 * @return 
+	 */
+	public setStation : Station ==> ()
+	setStation(stationIn) == (
+		station := stationIn;
+	);
+	
+	/*
+	 * Getter for the station.
+	 *
+	 * @return the station this block belongs to
+	 */
+	public getStation : () ==> Station
+	getStation() == return self.station;
 	
 	
 
