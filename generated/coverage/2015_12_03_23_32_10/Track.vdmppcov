@@ -30,16 +30,6 @@ operations
 		return self
 	);
 	
-	public getDirection1Seq : () ==> seq of Block
-	getDirection1Seq() == (
-		return self.direction1;
-	);
-	
-	public getDirection2Seq : () ==> seq of Block
-	getDirection2Seq() == (
-		return self.direction2;
-	);
-	
 
 
 functions
