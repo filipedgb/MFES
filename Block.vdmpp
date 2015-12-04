@@ -11,17 +11,17 @@ values
 instance variables
 	private semaphoreState1: Semaphore;
 	private semaphoreState2: Semaphore;
-	private currentTrain: [Train] := nil;
-	private station: [Station] := nil;
-
+	private hasTrain: bool := false;
+	
+	private indexInTrack: nat1 := 1;
+	
 operations
 	
-	/*
+	/**
 	 * Block constructor.
 	 *
 	 * @param semaphoreStateIn1 - the state of the semaphore1
 	 * @param semaphoreStateIn2 - the state of the semaphore2
-	 * @param stationIn - the station this block belongs to (if any)
 	 *
 	 * @return Train with auto-incremental id and the moving state set to the param value
 	 */
@@ -32,42 +32,57 @@ operations
 			return self
 		);
 	
-		
-	/*
+	/**
 	 * Getter for the semaphore 1.
 	 *
-	 * @return train the semaphore 1
+	 * @return the semaphore 1
 	 */
 	public getSemaphore1 : () ==> Semaphore
 	getSemaphore1() == return self.semaphoreState1;
 		
-	/*
+	/**
 	 * Getter for the semaphore 2.
 	 *
-	 * @return train the semaphore 2
+	 * @return the semaphore 2
 	 */
 	public getSemaphore2 : () ==> Semaphore
 	getSemaphore2() == return self.semaphoreState2;
 	
-	/*
-	 * Setter for the station.
+	/**
+	 * Getter for the index in track
 	 *
-	 * @return 
+	 * @return index
 	 */
-	public setStation : Station ==> ()
-	setStation(stationIn) == (
-		station := stationIn;
+	public getIndexInTrack : () ==> nat1
+	getIndexInTrack() == return self.indexInTrack;
+	
+	/**
+	 * Setter for the index in track
+	 *
+	 * @param i
+	 */
+	public setIndexInTrack : nat1 ==> ()
+	setIndexInTrack(i) == (
+		indexInTrack := i;
 	);
 	
-	/*
-	 * Getter for the station.
+	/**
+	 * Check if block has train
 	 *
-	 * @return the station this block belongs to
+	 * @return hasTrain
 	 */
-	public getStation : () ==> Station
-	getStation() == return self.station;
+	public hasTrain : () ==> bool
+	hasTrain() == return self.hasTrain;
 	
-	
+	/**
+	 * Setter for the hasTrain
+	 *
+	 * @param h
+	 */
+	public setHasTrain : bool ==> ()
+	setHasTrain(h) == (
+		hasTrain := h
+	);
 
 functions
 -- TODO Define functiones here

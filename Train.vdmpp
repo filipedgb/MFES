@@ -11,14 +11,16 @@ instance variables
 	private static lastTrainId: nat := 0;
 	private trainId: nat;
 	private moving: bool;
-	private direction: bool;
+	private direction: bool; -- true: forward, false: backward
+	private currentBlock: [Block] := nil;
 
 operations
 
-	/*
+	/**
 	 * Train constructor.
 	 *
 	 * @param movingIn - the state of the train (moving or stopped)
+	 * @param directionIn - the direction of the train (forward or backward)
 	 * 
 	 * @return Train with auto-incremental id and the moving state set to the param value
 	 */
@@ -31,8 +33,7 @@ operations
 		return self
 	);
 	
-	
-	/*
+	/**
 	 * Getter for the Train ID.
 	 *
 	 * @return train id
@@ -40,7 +41,7 @@ operations
 	public getId : () ==> nat
 	getId() == return self.trainId;
 	
-		/*
+	/**
 	 * Getter for the Train direction.
 	 *
 	 * @return train direction
@@ -49,13 +50,21 @@ operations
 	getDirection() == return self.direction;
 	
 	
-	/*
+	/**
 	 * Getter for the moving state of the train.
 	 *
 	 * @return the moving state of the train
 	 */
-	public getState : () ==> bool
-	getState() == return self.moving;
+	public isMoving : () ==> bool
+	isMoving() == return self.moving;
+	
+	public getCurrentBlock : () ==> Block
+	getCurrentBlock() == return self.currentBlock;
+	
+	public setCurrentBlock : Block ==> ()
+	setCurrentBlock(b) == (
+		currentBlock := b
+	);
 
 
 functions

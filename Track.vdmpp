@@ -9,44 +9,66 @@ types
 values
 -- TODO Define values here
 instance variables
-	private direction1: seq of Block;
-	private direction2: seq of Block;
+	private track: [seq of Block] := nil;
 
 operations
-	/*
-	 * Track constructor.
+	/**
+	 * Track constructor without blocks
 	 *
-	 * @param semaphoreStateIn1 - the state of the semaphore1
-	 * @param semaphoreStateIn2 - the state of the semaphore2
-	 * @param trackIn - the track this block belongs to
-	 *
+	 * @param blocks 
 	 * @return Train with auto-incremental id and the moving state set to the param value
 	 */
-
-	public Track : seq of Block * seq of Block ==> Track
-	Track(dr1,dr2) == (		
-		direction1 := dr1;
-		direction2 := dr2;
+	public Track : () ==> Track
+	Track() == (
 		return self
 	);
 	
-	public getDirection1Seq : () ==> seq of Block
-	getDirection1Seq() == (
-		return self.direction1;
+	/**
+	 * Track constructor.
+	 *
+	 * @param blocks 
+	 * @return Train with auto-incremental id and the moving state set to the param value
+	 */
+	public Track : seq of Block ==> Track
+	Track(blocks) == (		
+		track := blocks;
+		return self
 	);
 	
-	public getDirection2Seq : () ==> seq of Block
-	getDirection2Seq() == (
-		return self.direction2;
+	/**
+	* Getter for the track
+	* @return track
+	*/
+	public getTrack : () ==> seq of Block
+	getTrack() == (
+		return self.track
 	);
 	
-	public getNextDir1 : Block ==> Block
-	getNextDir1(currentBlock) == (
-	
-	
+	/**
+	* Adds block to the track
+	* @param block block to add
+	*/
+	public addBlockToTrack : Block ==> ()
+	addBlockToTrack(block) == (
+		track := track ^ [block];
+		block.setIndexInTrack(len track)
 	);
 	
-
+	public moveTrain : Train ==> ()
+	moveTrain(t) == (
+		dcl b: Block := t.getCurrentBlock();
+		-- check if it has nextBlock
+		if t.getDirection() then ( -- forward
+			t.setCurrentBlock(track(b.getIndexInTrack()+1));
+			track(b.getIndexInTrack()+1).setHasTrain(true);
+		)
+		else ( -- backward
+			t.setCurrentBlock(track(b.getIndexInTrack()-1));
+			track(b.getIndexInTrack()-1).setHasTrain(true);
+		); 
+		b.setHasTrain(false)
+	);
+	
 
 functions
 -- TODO Define functiones here
