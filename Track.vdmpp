@@ -10,7 +10,7 @@ values
 -- TODO Define values here
 instance variables
 	-- track is circular	
-	private track: [seq of Block] := nil;
+	private track: [seq of Block] := [];
 
 operations
 	/**
@@ -66,19 +66,19 @@ operations
 		if t.getDirection() then ( -- forward
 			if b.getIndexInTrack() < len track then (
 				t.setCurrentBlock(track(b.getIndexInTrack()+1));
-				track(b.getIndexInTrack()+1).setHasTrain(true);
+				track(b.getIndexInTrack()+1).setHasTrain(true)
 			) else ( -- was on last element of track, goes back to the beginning
-				t.setCurrentBlock(track(0));
-				track(0).setHasTrain(true);
+				t.setCurrentBlock(track(1));
+				track(1).setHasTrain(true)
 			)
 		)
 		else ( -- backward
-			if b.getIndexInTrack() = 0 then ( -- was on first element, goes to the end 
+			if b.getIndexInTrack() = 1 then ( -- was on first element, goes to the end 
 				t.setCurrentBlock(track(len track));
-				track(len track).setHasTrain(true);
+				track(len track).setHasTrain(true)
 			) else (
 				t.setCurrentBlock(track(b.getIndexInTrack()-1));
-				track(b.getIndexInTrack()-1).setHasTrain(true);
+				track(b.getIndexInTrack()-1).setHasTrain(true)
 			)
 		); 
 		b.setHasTrain(false)

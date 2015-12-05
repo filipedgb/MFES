@@ -71,8 +71,8 @@ operations
 	 *
 	 * @return hasTrain
 	 */
-	public hasTrain : () ==> bool
-	hasTrain() == return self.hasTrain;
+	public getHasTrain : () ==> bool
+	getHasTrain() == return self.hasTrain;
 	
 	/**
 	 * Setter for the hasTrain

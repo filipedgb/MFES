@@ -49,6 +49,14 @@ operations
 	public getDirection : () ==> bool
 	getDirection() == return self.direction;
 	
+		/**
+	 * Setter for the Train direction.
+	 *
+	 * @param train direction
+	 */
+	public setDirection : bool ==> ()
+	setDirection(d) == direction := d;
+	
 	
 	/**
 	 * Getter for the moving state of the train.
@@ -63,7 +71,8 @@ operations
 	
 	public setCurrentBlock : Block ==> ()
 	setCurrentBlock(b) == (
-		currentBlock := b
+		currentBlock := b;
+		b.setHasTrain(true)
 	);
 
 

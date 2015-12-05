@@ -10,7 +10,7 @@ values
 instance variables
 -- TODO Define instance variables here
 operations
-	public testCreateBlock: () ==> ()
+	public testCreateBlock : () ==> ()
   testCreateBlock() == (
     
   	dcl p: Block := new Block(<YELLOW>,<YELLOW>);
@@ -18,7 +18,7 @@ operations
   	assertEqual(<YELLOW>, p.getSemaphore2());
   );
 	
-	public testCreateTrack: () ==> ()
+	public testCreateTrack : () ==> ()
 	testCreateTrack() == (
     
     dcl p1: Block := new Block(<YELLOW>,<YELLOW>);
@@ -41,7 +41,67 @@ operations
   	assertEqual(p5, track.getTrack()(len track.getTrack()));
   	
   	assertEqual(6, p5.getIndexInTrack());   	
-  );
+ );
+ 
+ public testMoveTrain : () ==> () 
+ testMoveTrain() == (
+ 		dcl p1: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p2: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p3: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p4: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p5: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p6: Block := new Block(<YELLOW>,<YELLOW>);
+    
+    dcl track: Track := new Track();
+    
+    dcl trainForward: Train := new Train(true,true);
+    dcl trainBackward: Train := new Train(true,false);
+    
+    track.addBlockToTrack(p1);
+    track.addBlockToTrack(p2);
+    track.addBlockToTrack(p3);
+    track.addBlockToTrack(p4);
+    track.addBlockToTrack(p5);
+    track.addBlockToTrack(p6);
+    
+    assertEqual(6, len track.getTrack());
+    
+    trainForward.setCurrentBlock(p4);
+    trainBackward.setCurrentBlock(p3);
+    
+    assertEqual(p4, trainForward.getCurrentBlock());
+    assertEqual(p3, trainBackward.getCurrentBlock());
+    assertTrue(p4.getHasTrain());
+    assertTrue(p3.getHasTrain());
+    
+    track.moveTrain(trainForward); -- p4 -> p5
+    track.moveTrain(trainBackward); -- p3 -> p2
+    
+    assertEqual(p5, trainForward.getCurrentBlock());
+    assertEqual(p2, trainBackward.getCurrentBlock());
+    assertTrue(not p4.getHasTrain());
+    assertTrue(not p3.getHasTrain());
+    assertTrue(p5.getHasTrain());
+    assertTrue(p2.getHasTrain());
+    
+    track.moveTrain(trainForward); -- p5 -> p6
+    track.moveTrain(trainForward); -- p6 -> p1
+    
+    assertEqual(p1, trainForward.getCurrentBlock());
+    
+    assertTrue(p1.getHasTrain());
+    
+    trainForward.setDirection(false); -- move backwards now
+    
+    track.moveTrain(trainForward); -- p1 -> p6
+    
+    assertEqual(p6, trainForward.getCurrentBlock());
+    assertTrue(p6.getHasTrain());
+    assertTrue(not p1.getHasTrain());
+    
+  
+ ); 
+  
 	
 functions
 -- TODO Define functiones here
