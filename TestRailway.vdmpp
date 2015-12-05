@@ -103,6 +103,58 @@ operations
     assertTrue(p6.getHasTrain());
     assertTrue(not p1.getHasTrain());
  ); 
+ 
+ public testMoveTrainWithStations : () ==> () 
+ testMoveTrainWithStations() == (
+ 		dcl p1: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p2: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p3: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p4: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p5: Block := new Block(<YELLOW>,<YELLOW>);
+    dcl p6: Block := new Block(<YELLOW>,<YELLOW>);
+    
+    dcl track: Track := new Track();
+    
+    dcl trainForward: Train := new Train(true,true);
+    dcl trainBackward: Train := new Train(true,false);
+    
+    p3.setStation(true);
+    p4.setStation(true);
+    
+    track.addBlockToTrack(p1);
+    track.addBlockToTrack(p2);
+    track.addBlockToTrack(p3);
+    track.addBlockToTrack(p4);
+    track.addBlockToTrack(p5);
+    track.addBlockToTrack(p6);
+    
+    assertEqual(6, len track.getTrack());
+    
+    trainForward.setCurrentBlock(p2);
+    trainBackward.setCurrentBlock(p5);
+    
+    track.moveTrain(trainForward); -- p2 -> p3
+    track.moveTrain(trainBackward); -- p5 -> p4
+       
+    assertEqual(p3, trainForward.getCurrentBlock());    
+    assertEqual(p4, trainBackward.getCurrentBlock());
+        
+    track.moveTrain(trainForward); -- p3 -> p5
+    track.moveTrain(trainBackward); -- p4 -> p2
+
+    assertEqual(p5, trainForward.getCurrentBlock());    
+    assertEqual(p2, trainBackward.getCurrentBlock());
+            
+    track.moveTrain(trainForward); -- p5 -> p6
+    track.moveTrain(trainBackward); -- p2 -> p1
+    
+    assertEqual(p6, trainForward.getCurrentBlock());    
+    assertEqual(p1, trainBackward.getCurrentBlock());
+    
+    
+        
+ ); 
+  
   
 	
 functions

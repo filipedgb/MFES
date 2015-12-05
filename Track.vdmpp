@@ -53,8 +53,15 @@ operations
 		dcl b: Block := t.getCurrentBlock();
 		if t.getDirection() then ( -- forward
 			if b.getIndexInTrack() < len track then (
-				t.setCurrentBlock(track(b.getIndexInTrack()+1));
-				track(b.getIndexInTrack()+1).setHasTrain(true)
+				if(t.getCurrentBlock().isStation()) then (
+					t.setCurrentBlock(track(b.getIndexInTrack()+2));
+					track(b.getIndexInTrack()+2).setHasTrain(true)
+				)
+			  else (
+			   	t.setCurrentBlock(track(b.getIndexInTrack()+1));
+			   	track(b.getIndexInTrack()+1).setHasTrain(true)
+			  );
+			  					
 			) else ( -- was on last element of track, goes back to the beginning
 				t.setCurrentBlock(track(1));
 				track(1).setHasTrain(true)
@@ -65,8 +72,16 @@ operations
 				t.setCurrentBlock(track(len track));
 				track(len track).setHasTrain(true)
 			) else (
-				t.setCurrentBlock(track(b.getIndexInTrack()-1));
-				track(b.getIndexInTrack()-1).setHasTrain(true)
+				
+				if(t.getCurrentBlock().isStation()) then (
+					t.setCurrentBlock(track(b.getIndexInTrack()-2));
+					track(b.getIndexInTrack()-2).setHasTrain(true)
+				)
+			  else (
+			   	t.setCurrentBlock(track(b.getIndexInTrack()-1));
+			   	track(b.getIndexInTrack()-1).setHasTrain(true)
+			  );
+			
 			)
 		); 
 		b.setHasTrain(false)

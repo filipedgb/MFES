@@ -12,7 +12,7 @@ instance variables
 	private semaphoreState1: Semaphore;
 	private semaphoreState2: Semaphore;
 	private hasTrain: bool := false;
-	
+	private isPartOfStation: bool := false;
 	private indexInTrack: nat1 := 1;
 	
 operations
@@ -83,6 +83,25 @@ operations
 	setHasTrain(h) == (
 		hasTrain := h
 	);
+	
+ /**
+	 * Setter for being part of station
+	 *
+	 * @param s
+	 */
+	public setStation : bool ==> ()
+	setStation(s) == (
+		isPartOfStation := s
+	);
+	
+ /**
+	 * Check if block is part of a station
+	 *
+	 * @return isPartOfStation
+	 */
+	public isStation : () ==> bool
+	isStation() == return self.isPartOfStation;
+	
 
 functions
 -- TODO Define functiones here
