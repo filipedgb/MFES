@@ -9,6 +9,7 @@ types
 values
 -- TODO Define values here
 instance variables
+	-- track is circular	
 	private track: [seq of Block] := nil;
 
 operations
@@ -54,17 +55,31 @@ operations
 		block.setIndexInTrack(len track)
 	);
 	
+	/**
+	* Moves train on block according to the direction and position of the train
+	* @param t train
+	*/
+	-- falta ver os semaforos [n sei se vai ser para ver aqui]
 	public moveTrain : Train ==> ()
 	moveTrain(t) == (
 		dcl b: Block := t.getCurrentBlock();
-		-- check if it has nextBlock
 		if t.getDirection() then ( -- forward
-			t.setCurrentBlock(track(b.getIndexInTrack()+1));
-			track(b.getIndexInTrack()+1).setHasTrain(true);
+			if b.getIndexInTrack() < len track then (
+				t.setCurrentBlock(track(b.getIndexInTrack()+1));
+				track(b.getIndexInTrack()+1).setHasTrain(true);
+			) else ( -- was on last element of track, goes back to the beginning
+				t.setCurrentBlock(track(0));
+				track(0).setHasTrain(true);
+			)
 		)
 		else ( -- backward
-			t.setCurrentBlock(track(b.getIndexInTrack()-1));
-			track(b.getIndexInTrack()-1).setHasTrain(true);
+			if b.getIndexInTrack() = 0 then ( -- was on first element, goes to the end 
+				t.setCurrentBlock(track(len track));
+				track(len track).setHasTrain(true);
+			) else (
+				t.setCurrentBlock(track(b.getIndexInTrack()-1));
+				track(b.getIndexInTrack()-1).setHasTrain(true);
+			)
 		); 
 		b.setHasTrain(false)
 	);
