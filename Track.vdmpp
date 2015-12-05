@@ -25,18 +25,6 @@ operations
 	);
 	
 	/**
-	 * Track constructor.
-	 *
-	 * @param blocks 
-	 * @return Train with auto-incremental id and the moving state set to the param value
-	 */
-	public Track : seq of Block ==> Track
-	Track(blocks) == (		
-		track := blocks;
-		return self
-	);
-	
-	/**
 	* Getter for the track
 	* @return track
 	*/

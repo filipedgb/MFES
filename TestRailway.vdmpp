@@ -28,9 +28,13 @@ operations
     dcl p5: Block := new Block(<YELLOW>,<YELLOW>);
     dcl p6: Block := new Block(<YELLOW>,<YELLOW>);
   
-  	dcl track: Track := new Track(
-  			[p1,p2,p3,p4,p6]
-  	);
+  	dcl track: Track := new Track();
+  	
+  	track.addBlockToTrack(p1);
+  	track.addBlockToTrack(p2);
+  	track.addBlockToTrack(p3);
+  	track.addBlockToTrack(p4);
+  	track.addBlockToTrack(p6);
   	
   	assertEqual(5,len track.getTrack());
   	
@@ -98,8 +102,6 @@ operations
     assertEqual(p6, trainForward.getCurrentBlock());
     assertTrue(p6.getHasTrain());
     assertTrue(not p1.getHasTrain());
-    
-  
  ); 
   
 	
