@@ -43,48 +43,93 @@ operations
 		block.setIndexInTrack(len track)
 	);
 	
+	public changeSemaphoresToRed : Train ==> ()
+	changeSemaphoresToRed(t) == (
+		dcl b: Block := t.getCurrentBlock();
+		dcl index: nat := 0;
+		
+		if t.getDirection() then ( -- clockwise
+			while	track(b.getIndexInTrack()+index).isStation() = false do (
+				track(b.getIndexInTrack()+index).setSemaphore2(<RED>);
+				index := index+1;
+			)
+		) 
+		else ( -- counterclockwise
+			while	track(b.getIndexInTrack()-index).isStation() = false do (
+				track(b.getIndexInTrack()-index).setSemaphore1(<RED>);
+				index := index+1;
+			)
+		)
+	
+	);
+	
+	
+	
 	/**
 	* Moves train on block according to the direction and position of the train
 	* @param t train
 	*/
 	-- falta ver os semaforos [n sei se vai ser para ver aqui]
-	public moveTrain : Train ==> ()
+	public moveTrain : Train ==> bool
 	moveTrain(t) == (
 		dcl b: Block := t.getCurrentBlock();
-		if t.getDirection() then ( -- forward
-			if b.getIndexInTrack() < len track then (
+		if t.getDirection() then ( -- clockwise
+			if t.getCurrentBlock().getSemaphore1() = <RED> then (
+				return false;
+			)
+			else if b.getIndexInTrack() < len track then (
 				if(t.getCurrentBlock().isStation()) then (
 					t.setCurrentBlock(track(b.getIndexInTrack()+2));
-					track(b.getIndexInTrack()+2).setHasTrain(true)
+					track(b.getIndexInTrack()+2).setHasTrain(true);
+					b.setHasTrain(false);
+					changeSemaphoresToRed(t);					
 				)
 			  else (
 			   	t.setCurrentBlock(track(b.getIndexInTrack()+1));
-			   	track(b.getIndexInTrack()+1).setHasTrain(true)
-			  );
-			  					
-			) else ( -- was on last element of track, goes back to the beginning
-				t.setCurrentBlock(track(1));
-				track(1).setHasTrain(true)
-			)
-		)
-		else ( -- backward
-			if b.getIndexInTrack() = 1 then ( -- was on first element, goes to the end 
-				t.setCurrentBlock(track(len track));
-				track(len track).setHasTrain(true)
-			) else (
+			   	track(b.getIndexInTrack()+1).setHasTrain(true);
+	   			b.setHasTrain(false);
+			  	changeSemaphoresToRed(t);   			
+				); 
 				
+				return true;
+				 					
+		  )
+		  else ( -- was on last element of track, goes back to the beginning
+				t.setCurrentBlock(track(1));
+				b.setHasTrain(false);
+				track(1).setHasTrain(true);
+				changeSemaphoresToRed(t);	
+				return true;
+		 )
+		)
+		else ( -- counterclockwise
+			if t.getCurrentBlock().getSemaphore2() = <RED> then (
+				return false;
+			)
+			
+			else if b.getIndexInTrack() = 1 then ( -- was on first element, goes to the end 
+				t.setCurrentBlock(track(len track));
+				track(len track).setHasTrain(true);
+				b.setHasTrain(false);
+				return true;
+			) else (
+
 				if(t.getCurrentBlock().isStation()) then (
 					t.setCurrentBlock(track(b.getIndexInTrack()-2));
-					track(b.getIndexInTrack()-2).setHasTrain(true)
+					track(b.getIndexInTrack()-2).setHasTrain(true);
+					changeSemaphoresToRed(t);					
 				)
 			  else (
 			   	t.setCurrentBlock(track(b.getIndexInTrack()-1));
-			   	track(b.getIndexInTrack()-1).setHasTrain(true)
+			   	track(b.getIndexInTrack()-1).setHasTrain(true);
+					changeSemaphoresToRed(t);		   	
 			  );
+			  
+			  b.setHasTrain(false);
+			  return true;
 			
 			)
 		); 
-		b.setHasTrain(false)
 	);
 	
 

@@ -31,6 +31,22 @@ operations
 			semaphoreState2 := semaphoreStateIn2;
 			return self
 		);
+		
+	/**
+	 * Setter for the semaphore 1.
+	 *
+	 */
+	public setSemaphore1 : Semaphore  ==> ()
+	setSemaphore1(sem1) == ( semaphoreState1 := sem1 );
+		
+	/**
+	 * Setter for the semaphore 2.
+	 *
+	 */
+	public setSemaphore2 : Semaphore  ==> ()
+	setSemaphore2(sem2) == ( semaphoreState2 := sem2 );
+				
+		
 	
 	/**
 	 * Getter for the semaphore 1.
@@ -74,14 +90,14 @@ operations
 	public getHasTrain : () ==> bool
 	getHasTrain() == return self.hasTrain;
 	
-	/**
+ /**
 	 * Setter for the hasTrain
 	 *
 	 * @param h
 	 */
 	public setHasTrain : bool ==> ()
 	setHasTrain(h) == (
-		hasTrain := h
+		hasTrain := h;
 	);
 	
  /**
