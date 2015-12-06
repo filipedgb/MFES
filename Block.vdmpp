@@ -31,6 +31,25 @@ operations
 			semaphoreState2 := semaphoreStateIn2;
 			return self
 		);
+		
+/**
+	 * Setter for the semaphore 1.
+	 *
+	 */
+	public setSemaphore1 : Semaphore ==> ()
+	setSemaphore1(stateIn) == (
+			semaphoreState1 := stateIn;
+	);
+		
+/**
+	 * Setter for the semaphore 2.
+	 *
+	 */
+	public setSemaphore2 : Semaphore ==> ()
+	setSemaphore2(stateIn) == (
+			semaphoreState2 := stateIn;
+	);
+		
 	
 	/**
 	 * Getter for the semaphore 1.

@@ -55,11 +55,11 @@ operations
     dcl p4: Block := new Block(<YELLOW>,<YELLOW>);
     dcl p5: Block := new Block(<YELLOW>,<YELLOW>);
     dcl p6: Block := new Block(<YELLOW>,<YELLOW>);
-    
     dcl track: Track := new Track();
-    
     dcl trainForward: Train := new Train(true,true);
     dcl trainBackward: Train := new Train(true,false);
+    dcl dummy: bool := false;
+    
     
     track.addBlockToTrack(p1);
     track.addBlockToTrack(p2);
@@ -78,8 +78,8 @@ operations
     assertTrue(p4.getHasTrain());
     assertTrue(p3.getHasTrain());
     
-    track.moveTrain(trainForward); -- p4 -> p5
-    track.moveTrain(trainBackward); -- p3 -> p2
+    dummy := track.moveTrain(trainForward); -- p4 -> p5
+    dummy := track.moveTrain(trainBackward); -- p3 -> p2
     
     assertEqual(p5, trainForward.getCurrentBlock());
     assertEqual(p2, trainBackward.getCurrentBlock());
@@ -88,8 +88,8 @@ operations
     assertTrue(p5.getHasTrain());
     assertTrue(p2.getHasTrain());
     
-    track.moveTrain(trainForward); -- p5 -> p6
-    track.moveTrain(trainForward); -- p6 -> p1
+    dummy := track.moveTrain(trainForward); -- p5 -> p6
+    dummy := track.moveTrain(trainForward); -- p6 -> p1
     
     assertEqual(p1, trainForward.getCurrentBlock());
     
@@ -97,7 +97,7 @@ operations
     
     trainForward.setDirection(false); -- move backwards now
     
-    track.moveTrain(trainForward); -- p1 -> p6
+    dummy := track.moveTrain(trainForward); -- p1 -> p6
     
     assertEqual(p6, trainForward.getCurrentBlock());
     assertTrue(p6.getHasTrain());
@@ -112,9 +112,8 @@ operations
     dcl p4: Block := new Block(<YELLOW>,<YELLOW>);
     dcl p5: Block := new Block(<YELLOW>,<YELLOW>);
     dcl p6: Block := new Block(<YELLOW>,<YELLOW>);
-    
+    dcl dummy: bool := false;  
     dcl track: Track := new Track();
-    
     dcl trainForward: Train := new Train(true,true);
     dcl trainBackward: Train := new Train(true,false);
     
@@ -133,20 +132,20 @@ operations
     trainForward.setCurrentBlock(p2);
     trainBackward.setCurrentBlock(p5);
     
-    track.moveTrain(trainForward); -- p2 -> p3
-    track.moveTrain(trainBackward); -- p5 -> p4
+    dummy:=track.moveTrain(trainForward); -- p2 -> p3
+    dummy:=track.moveTrain(trainBackward); -- p5 -> p4
        
     assertEqual(p3, trainForward.getCurrentBlock());    
     assertEqual(p4, trainBackward.getCurrentBlock());
         
-    track.moveTrain(trainForward); -- p3 -> p5
-    track.moveTrain(trainBackward); -- p4 -> p2
+    dummy:=track.moveTrain(trainForward); -- p3 -> p5
+    dummy:=track.moveTrain(trainBackward); -- p4 -> p2
 
     assertEqual(p5, trainForward.getCurrentBlock());    
     assertEqual(p2, trainBackward.getCurrentBlock());
             
-    track.moveTrain(trainForward); -- p5 -> p6
-    track.moveTrain(trainBackward); -- p2 -> p1
+    dummy:=track.moveTrain(trainForward); -- p5 -> p6
+    dummy:=track.moveTrain(trainBackward); -- p2 -> p1
     
     assertEqual(p6, trainForward.getCurrentBlock());    
     assertEqual(p1, trainBackward.getCurrentBlock());
@@ -205,8 +204,8 @@ operations
     trainForward.setCurrentBlock(p2);
     trainBackward.setCurrentBlock(p9);
     
-    track.moveTrain(trainForward); -- p2 -> p3
-    track.moveTrain(trainBackward); -- p9 -> p7
+    dummy := track.moveTrain(trainForward); -- p2 -> p3
+    dummy := track.moveTrain(trainBackward); -- p9 -> p7
               
     assertEqual(p7, trainBackward.getCurrentBlock());    
    
@@ -214,23 +213,26 @@ operations
     assertEqual(<GREEN>, track.getTrack()(1).getSemaphore1());
     assertEqual(<GREEN>, track.getTrack()(2).getSemaphore1());
     assertEqual(<GREEN>, track.getTrack()(3).getSemaphore1());
-    assertEqual(<GREEN>, track.getTrack()(4).getSemaphore1());          
-    assertEqual(<RED>, track.getTrack()(5).getSemaphore1());
-    assertEqual(<RED>, track.getTrack()(6).getSemaphore1());           
+    assertEqual(<GREEN>, track.getTrack()(4).getSemaphore1()); 
+     
     assertEqual(<RED>, track.getTrack()(7).getSemaphore1());    
+     
+    assertEqual(<RED>, track.getTrack()(6).getSemaphore1());           
+          
+    assertEqual(<RED>, track.getTrack()(5).getSemaphore1());
     
         
-    track.moveTrain(trainForward); -- p3 -> p3
+    dummy:= track.moveTrain(trainForward); -- p3 -> p3
     assertEqual(false,dummy);
-    track.moveTrain(trainBackward); -- p7 -> p6
+    dummy:= track.moveTrain(trainBackward); -- p7 -> p6
     
-    track.moveTrain(trainForward); -- p3 -> p3
+    dummy:= track.moveTrain(trainForward); -- p3 -> p3
     assertEqual(false,dummy);
-    track.moveTrain(trainBackward); -- p6 -> p5
+    dummy:=track.moveTrain(trainBackward); -- p6 -> p5
         
-    track.moveTrain(trainForward); -- p3 -> p3
+    dummy:=track.moveTrain(trainForward); -- p3 -> p3
     assertEqual(false,dummy);
-    track.moveTrain(trainBackward); -- p5 -> p4
+    dummy:=track.moveTrain(trainBackward); -- p5 -> p4
         
       
     assertEqual(p3, trainForward.getCurrentBlock());    
