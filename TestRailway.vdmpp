@@ -236,8 +236,7 @@ operations
         
       
     assertEqual(p3, trainForward.getCurrentBlock());    
-    assertEqual(p4, trainBackward.getCurrentBlock());   
-        
+    assertEqual(p4, trainBackward.getCurrentBlock());
   
         
  ); 

@@ -65,6 +65,53 @@ operations
 	
 	);
 		
+	public changeSemaphoresToGreen: Train ==> ()
+	changeSemaphoresToGreen(t) == (
+		dcl b: Block := t.getCurrentBlock();
+		dcl index: nat := 0;
+		
+		if t.getDirection() then ( -- clockwise
+			while	track(b.getIndexInTrack()+index).isStation() = false do (
+				track(b.getIndexInTrack()+index).setSemaphore2(<GREEN>);
+				index := index+1;
+			)
+		) 
+		else ( -- counterclockwise
+			while	track(b.getIndexInTrack()-index).isStation() = false do (
+				track(b.getIndexInTrack()-index).setSemaphore1(<GREEN>);
+				index := index+1;
+			)
+		)
+	
+	);
+	
+	public askToLeaveStation: Train ==> bool
+	askToLeaveStation(t) == (
+		dcl b: Block := t.getCurrentBlock();
+		dcl index: nat1 := 2;
+	
+		if t.getDirection() then ( -- clockwise
+			while	track(b.getIndexInTrack()+index).isStation() = false do (
+				if(track(b.getIndexInTrack()+index).getHasTrain()) then return false;
+				index := index+1;
+			);
+			
+			return true;
+		) 
+		else ( -- counterclockwise
+			while	track(b.getIndexInTrack()-index).isStation() = false do (
+				if(track(b.getIndexInTrack()-index).getHasTrain()) then return false;
+				index := index+1;
+
+			);
+			
+			return true;
+		)
+	
+	);
+		
+	
+		
 	
 	/**
 	* Moves train on block according to the direction and position of the train
