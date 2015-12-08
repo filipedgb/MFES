@@ -51,13 +51,13 @@ operations
 		dcl index: nat := 0;
 		
 		if t.getDirection() then ( -- clockwise
-			while	track(b.getIndexInTrack()+index).isStation() = false do (
+			while b.getIndexInTrack()+index > 0 and b.getIndexInTrack()+index < len track and	track(b.getIndexInTrack()+index).isStation() = false do (
 				track(b.getIndexInTrack()+index).setSemaphore2(<RED>);
 				index := index+1;
 			)
 		) 
 		else ( -- counterclockwise
-			while	track(b.getIndexInTrack()-index).isStation() = false do (
+			while	b.getIndexInTrack()-index > 0 and b.getIndexInTrack()-index < len track and track(b.getIndexInTrack()-index).isStation() = false do (
 				track(b.getIndexInTrack()-index).setSemaphore1(<RED>);
 				index := index+1;
 			)
@@ -72,13 +72,13 @@ operations
 		IO`println("Estou a mudar os semáforos para verde");
 		
 		if t.getDirection() then ( -- clockwise
-			while	track(b.getIndexInTrack()+index).isStation() = false do (
+			while	b.getIndexInTrack()+index > 0 and b.getIndexInTrack()+index < len track and track(b.getIndexInTrack()+index).isStation() = false do (
 				track(b.getIndexInTrack()+index).setSemaphore1(<GREEN>);
 				index := index+1;
 			)
 		) 
 		else ( -- counterclockwise
-			while	track(b.getIndexInTrack()-index).isStation() = false do (
+			while b.getIndexInTrack()-index > 0 and b.getIndexInTrack()-index < len track and	track(b.getIndexInTrack()-index).isStation() = false do (
 				track(b.getIndexInTrack()-index).setSemaphore2(<GREEN>);	
 				index := index+1;
 			)
@@ -92,7 +92,7 @@ operations
 		dcl index: nat1 := 2;
 	
 		if t.getDirection() then ( -- clockwise
-			while	track(b.getIndexInTrack()+index).isStation() = false do (
+			while b.getIndexInTrack()+index > 0 and b.getIndexInTrack()+index < len track and	track(b.getIndexInTrack()+index).isStation() = false  do (
 				if(track(b.getIndexInTrack()+index).getHasTrain()) then return false;
 				index := index+1;
 			);
@@ -101,7 +101,7 @@ operations
 			moveTrain(t);			
 		) 
 		else ( -- counterclockwise
-			while	track(b.getIndexInTrack()-index).isStation() = false do (
+			while	b.getIndexInTrack()+index > 0 and b.getIndexInTrack()+index < len track and track(b.getIndexInTrack()-index).isStation() = false do (
 				if(track(b.getIndexInTrack()-index).getHasTrain()) then return false;
 				index := index+1;
 
