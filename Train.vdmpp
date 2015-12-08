@@ -38,7 +38,7 @@ operations
 	 *
 	 * @return train id
 	 */
-	public getId : () ==> nat
+	pure public getId : () ==> nat
 	getId() == return self.trainId;
 	
 	/**
@@ -46,7 +46,7 @@ operations
 	 *
 	 * @return train direction
 	 */
-	public getDirection : () ==> bool
+	pure public getDirection : () ==> bool
 	getDirection() == return self.direction;
 	
 		/**
@@ -63,18 +63,21 @@ operations
 	 *
 	 * @return the moving state of the train
 	 */
-	public isMoving : () ==> bool
+	pure public isMoving : () ==> bool
 	isMoving() == return self.moving;
 	
-	public getCurrentBlock : () ==> Block
+	pure public getCurrentBlock : () ==> Block
 	getCurrentBlock() == return self.currentBlock;
+	
 	
 	public setCurrentBlock : Block ==> ()
 	setCurrentBlock(b) == (
 		currentBlock := b;
 		b.setHasTrain(true)
-	);
-
+	)
+	pre if(direction) then b.getSemaphore1() <> <RED>
+	else b.getSemaphore2() <> <RED>
+	post currentBlock = b and currentBlock.getHasTrain() = true;
 
 functions
 -- TODO Define functiones here

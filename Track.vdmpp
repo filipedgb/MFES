@@ -28,7 +28,7 @@ operations
 	* Getter for the track
 	* @return track
 	*/
-	public getTrack : () ==> seq of Block
+	pure public getTrack : () ==> seq of Block
 	getTrack() == (
 		return self.track
 	);
@@ -48,18 +48,31 @@ operations
 	public changeSemaphoresToRed : Train ==> ()
 	changeSemaphoresToRed(t) == (
 		dcl b: Block := t.getCurrentBlock();
-		dcl index: nat := 0;
+		dcl initialIndex: nat1 := b.getIndexInTrack();
+		dcl direction: bool := t.getDirection();
+		dcl index: nat1 := initialIndex;
 		
+				
 		if t.getDirection() then ( -- clockwise
-			while b.getIndexInTrack()+index > 0 and b.getIndexInTrack()+index < len track and	track(b.getIndexInTrack()+index).isStation() = false do (
-				track(b.getIndexInTrack()+index).setSemaphore2(<RED>);
-				index := index+1;
+			while track(index).isStation() = false do (
+				track(index).setSemaphore2(<RED>);
+			
+				IO`print("CCW Semaphore of track (");
+	  		IO`print(index); 
+	  		IO`println(") set to RED ");
+					
+				index := getNextBlockIndex(index,direction);
 			)
 		) 
 		else ( -- counterclockwise
-			while	b.getIndexInTrack()-index > 0 and b.getIndexInTrack()-index < len track and track(b.getIndexInTrack()-index).isStation() = false do (
-				track(b.getIndexInTrack()-index).setSemaphore1(<RED>);
-				index := index+1;
+			while	track(index).isStation() = false do (
+				track(index).setSemaphore1(<RED>);
+				
+				IO`print("CW Semaphore of track (");
+	  		IO`print(index); 
+	  		IO`println(") set to RED ");
+				
+				index := getNextBlockIndex(index,direction);
 			)
 		)
 	);
@@ -67,20 +80,31 @@ operations
 	public changeSemaphoresToGreen: Train ==> ()
 	changeSemaphoresToGreen(t) == (
 		dcl b: Block := t.getCurrentBlock();
-		dcl index: nat1 := 2;
-		
-		IO`println("Estou a mudar os semáforos para verde");
-		
+		dcl initialIndex: nat1 := b.getIndexInTrack();
+		dcl direction: bool := t.getDirection();
+		dcl index: nat1 := getNextBlockIndex(initialIndex,direction);
+				
 		if t.getDirection() then ( -- clockwise
-			while	b.getIndexInTrack()+index > 0 and b.getIndexInTrack()+index < len track and track(b.getIndexInTrack()+index).isStation() = false do (
-				track(b.getIndexInTrack()+index).setSemaphore1(<GREEN>);
-				index := index+1;
+			while	track(index).isStation() = false do (
+				track(index).setSemaphore1(<GREEN>);
+				
+				IO`print("CW Semaphore of track (");
+	  		IO`print(index); 
+	  		IO`println(") set to GREEN ");
+				
+				index := getNextBlockIndex(index,direction);
 			)
+			
 		) 
 		else ( -- counterclockwise
-			while b.getIndexInTrack()-index > 0 and b.getIndexInTrack()-index < len track and	track(b.getIndexInTrack()-index).isStation() = false do (
-				track(b.getIndexInTrack()-index).setSemaphore2(<GREEN>);	
-				index := index+1;
+			while track(index).isStation() = false do (
+				track(index).setSemaphore2(<GREEN>);
+				
+				IO`print("CW Semaphore of track (");
+	  		IO`print(index); 
+	  		IO`println(") set to GREEN ");
+					
+				index := getNextBlockIndex(index,direction);
 			)
 		)
 	
@@ -89,31 +113,47 @@ operations
 	public askToLeaveStation: Train ==> bool
 	askToLeaveStation(t) == (
 		dcl b: Block := t.getCurrentBlock();
-		dcl index: nat1 := 2;
+		dcl initialIndex: nat1 := b.getIndexInTrack();
+		dcl direction: bool := t.getDirection();
+		dcl index: nat1 := getNextBlockIndex(initialIndex,direction);
 	
+		IO`println("Can I leave station?");
+			
 		if t.getDirection() then ( -- clockwise
-			while b.getIndexInTrack()+index > 0 and b.getIndexInTrack()+index < len track and	track(b.getIndexInTrack()+index).isStation() = false  do (
-				if(track(b.getIndexInTrack()+index).getHasTrain()) then return false;
-				index := index+1;
+			while track(index).isStation() = false  do (
+				if(track(index).getHasTrain()) then (
+					IO`print("No, there is a train in track (");
+		  		IO`print(index); 
+		  		IO`println(")");
+
+					return false;
+				);
+				index := getNextBlockIndex(index,direction);
 			);
 		
+			IO`println("Yes, track is not busy");
 			changeSemaphoresToGreen(t);
 			moveTrain(t);			
 		) 
 		else ( -- counterclockwise
-			while	b.getIndexInTrack()+index > 0 and b.getIndexInTrack()+index < len track and track(b.getIndexInTrack()-index).isStation() = false do (
-				if(track(b.getIndexInTrack()-index).getHasTrain()) then return false;
-				index := index+1;
-
+			while	track(index).isStation() = false do (
+				if(track(index).getHasTrain()) then (
+					IO`print("No, there is a train in track (");
+		  		IO`print(index); 
+		  		IO`println(")");
+		  		
+					return false;
+				);
+				index := getNextBlockIndex(index,direction);
 			);
 			
+			IO`println("Yes, track is not busy");
 			changeSemaphoresToGreen(t);
 			moveTrain(t);
 		)
 	
-	);
-		
-	
+	)
+	pre t.getCurrentBlock().isStation();	
 		
 	
 	/**
@@ -130,9 +170,12 @@ operations
 			if(nb.getSemaphore1() = <RED>) then (
 				askToLeaveStation(t);
 			)
-			else (
+			else (			
 				t.setCurrentBlock(nb);
 				b.setHasTrain(false);
+				
+				b.setSemaphore1(<YELLOW>);
+				nb.setSemaphore1(<RED>);
 				
 				if(b.isStation()) then (
 					changeSemaphoresToRed(t);
@@ -143,11 +186,14 @@ operations
 		)
 		else ( --semaphores 2
 			if(nb.getSemaphore2() = <RED>) then (
-				return false
+				askToLeaveStation(t);
 			)
-			else (
+			else (			
 				t.setCurrentBlock(nb);
 				b.setHasTrain(false);
+				
+				b.setSemaphore2(<YELLOW>);
+				nb.setSemaphore2(<RED>);
 				
 				if(b.isStation()) then (
 					changeSemaphoresToRed(t);
@@ -199,7 +245,48 @@ operations
 		
 	);
 		
+	/**
+	* Get next block index
+	* @param currentIndex nat1
+	* @param drection bool
+	*
+	*	return nextIndex
+	*/
 	
+	public getNextBlockIndex : nat1 * bool ==> nat1 
+	getNextBlockIndex(currentIndex,direction) == (
+	
+			if(direction) then (
+				if(track(currentIndex).isStation() and  currentIndex >= (len track-1)) then (
+					return 1;
+				)
+				else if(currentIndex >= len track ) then (
+					return 1;
+				)
+				else if(track(currentIndex).isStation()) then ( -- is station
+					return currentIndex+2;
+				)
+				else ( 
+					return currentIndex+1;	
+				)
+			)
+			else (
+				if(track(currentIndex).isStation() and currentIndex = 2) then (
+					return len track;
+				)
+				else if(currentIndex = 1) then (
+					return len track;
+				)	
+				else if(track(currentIndex).isStation()) then ( -- is station
+					return currentIndex-2;
+				)
+				else ( 
+					return currentIndex-1;	
+				)
+			)
+		
+	);
+		
 	
 
 functions

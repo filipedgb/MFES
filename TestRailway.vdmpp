@@ -139,17 +139,28 @@ operations
     assertEqual(p4, trainBackward.getCurrentBlock());
         
     dummy:=track.moveTrain(trainForward); -- p3 -> p5
-    dummy:=track.moveTrain(trainBackward); -- p4 -> p2
+    dummy:=track.moveTrain(trainBackward); -- p4 -> p4
 
     assertEqual(p5, trainForward.getCurrentBlock());    
-    assertEqual(p2, trainBackward.getCurrentBlock());
+    assertEqual(p4, trainBackward.getCurrentBlock());
             
     dummy:=track.moveTrain(trainForward); -- p5 -> p6
-    dummy:=track.moveTrain(trainBackward); -- p2 -> p1
+    dummy:=track.moveTrain(trainBackward); -- p4 -> p4
     
     assertEqual(p6, trainForward.getCurrentBlock());    
-    assertEqual(p1, trainBackward.getCurrentBlock());
+    assertEqual(p4, trainBackward.getCurrentBlock());
     
+    dummy:=track.moveTrain(trainForward); -- p6 -> p1
+    dummy:=track.moveTrain(trainBackward); -- p4 -> p4
+    
+    dummy:=track.moveTrain(trainForward); -- p1 -> p2
+    dummy:=track.moveTrain(trainBackward); -- p4 -> p4
+    
+    dummy:=track.moveTrain(trainForward); -- p2 -> p3
+    dummy:=track.moveTrain(trainBackward); -- p4 -> p2
+    
+    assertEqual(p3, trainForward.getCurrentBlock());      
+    assertEqual(p2, trainBackward.getCurrentBlock());
     
         
  ); 
@@ -327,6 +338,41 @@ operations
  );   
   
   
+public testSemaphores : () ==> ()   
+testSemaphores() == (
+		dcl p1: Block := new Block(<GREEN>,<GREEN>);
+    dcl p2: Block := new Block(<GREEN>,<GREEN>);
+    dcl p3: Block := new Block(<GREEN>,<GREEN>);
+    dcl p4: Block := new Block(<GREEN>,<GREEN>);
+    dcl p5: Block := new Block(<GREEN>,<GREEN>);
+    
+    dcl track: Track := new Track();
+    dcl dummy: bool := false;
+    dcl trainForward: Train := new Train(true,true);
+       
+    p1.setStation(true);
+    p2.setStation(true);   
+       
+    track.addBlockToTrack(p1);
+    track.addBlockToTrack(p2);
+    track.addBlockToTrack(p3);
+    track.addBlockToTrack(p4);
+    track.addBlockToTrack(p5);
+    
+    trainForward.setCurrentBlock(p1);
+   
+    dummy := track.moveTrain(trainForward); -- p1 -> p2
+    
+    assertEqual(<YELLOW>, track.getTrack()(1).getSemaphore1());    
+    assertEqual(<RED>, track.getTrack()(3).getSemaphore1());    
+    assertEqual(<GREEN>, track.getTrack()(4).getSemaphore1());    
+    assertEqual(<GREEN>, track.getTrack()(5).getSemaphore1());    
+
+    assertEqual(<RED>, track.getTrack()(3).getSemaphore2());    
+    assertEqual(<RED>, track.getTrack()(4).getSemaphore2());    
+    assertEqual(<RED>, track.getTrack()(5).getSemaphore2());    
+
+);  
 	
 functions
 -- TODO Define functiones here
