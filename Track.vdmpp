@@ -62,23 +62,24 @@ operations
 				index := index+1;
 			)
 		)
-	
 	);
 		
 	public changeSemaphoresToGreen: Train ==> ()
 	changeSemaphoresToGreen(t) == (
 		dcl b: Block := t.getCurrentBlock();
-		dcl index: nat := 0;
+		dcl index: nat1 := 2;
+		
+		IO`println("Estou a mudar os semáforos para verde");
 		
 		if t.getDirection() then ( -- clockwise
 			while	track(b.getIndexInTrack()+index).isStation() = false do (
-				track(b.getIndexInTrack()+index).setSemaphore2(<GREEN>);
+				track(b.getIndexInTrack()+index).setSemaphore1(<GREEN>);
 				index := index+1;
 			)
 		) 
 		else ( -- counterclockwise
 			while	track(b.getIndexInTrack()-index).isStation() = false do (
-				track(b.getIndexInTrack()-index).setSemaphore1(<GREEN>);
+				track(b.getIndexInTrack()-index).setSemaphore2(<GREEN>);	
 				index := index+1;
 			)
 		)
@@ -95,8 +96,9 @@ operations
 				if(track(b.getIndexInTrack()+index).getHasTrain()) then return false;
 				index := index+1;
 			);
-			
-			return true;
+		
+			changeSemaphoresToGreen(t);
+			moveTrain(t);			
 		) 
 		else ( -- counterclockwise
 			while	track(b.getIndexInTrack()-index).isStation() = false do (
@@ -105,7 +107,8 @@ operations
 
 			);
 			
-			return true;
+			changeSemaphoresToGreen(t);
+			moveTrain(t);
 		)
 	
 	);
@@ -125,7 +128,7 @@ operations
 	
 		if(t.getDirection()) then ( -- semaphores 1
 			if(nb.getSemaphore1() = <RED>) then (
-				return false
+				askToLeaveStation(t);
 			)
 			else (
 				t.setCurrentBlock(nb);
