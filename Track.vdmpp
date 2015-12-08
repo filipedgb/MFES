@@ -94,7 +94,6 @@ operations
 				
 				index := getNextBlockIndex(index,direction);
 			)
-			
 		) 
 		else ( -- counterclockwise
 			while track(index).isStation() = false do (
@@ -210,7 +209,7 @@ operations
 	* @param t train
 	*/
 	
-	public getNextBlock : Train ==> Block 
+	pure public getNextBlock : Train ==> Block 
 	getNextBlock(t) == (
 			dcl b : Block := t.getCurrentBlock();
 	
@@ -253,7 +252,7 @@ operations
 	*	return nextIndex
 	*/
 	
-	public getNextBlockIndex : nat1 * bool ==> nat1 
+	pure public getNextBlockIndex : nat1 * bool ==> nat1 
 	getNextBlockIndex(currentIndex,direction) == (
 	
 			if(direction) then (

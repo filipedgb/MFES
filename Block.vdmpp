@@ -14,7 +14,7 @@ instance variables
 	private hasTrain: bool := false;
 	private isPartOfStation: bool := false;
 	private indexInTrack: nat1 := 1;
-	
+--inv if(isPartOfStation) then (semaphoreState1 <> <GREEN>);
 operations
 	
 	/**
