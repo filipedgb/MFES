@@ -69,10 +69,16 @@ operations
 	pure public getCurrentBlock : () ==> Block
 	getCurrentBlock() == return self.currentBlock;
 	
-	
+ 	/**
+	 * Sets current block of a train (where the train is) 
+	 * Sets the block's semaphores to RED
+   * @param the current block
+	 */
 	public setCurrentBlock : Block ==> ()
 	setCurrentBlock(b) == (
 		currentBlock := b;
+		b.setSemaphore1(<RED>);
+		b.setSemaphore2(<RED>);	
 		b.setHasTrain(true)
 	)
 	pre if(direction) then b.getSemaphore1() <> <RED>

@@ -97,11 +97,13 @@ operations
     
     trainForward.setDirection(false); -- move backwards now
     
-    dummy := track.moveTrain(trainForward); -- p1 -> p6
+    assertTrue(not trainForward.getDirection());
     
-    assertEqual(p6, trainForward.getCurrentBlock());
-    assertTrue(p6.getHasTrain());
-    assertTrue(not p1.getHasTrain());
+    dummy := track.moveTrain(trainForward); -- p1 -> p6 => cant
+    
+    assertTrue(not dummy);
+    assertEqual(p1, trainForward.getCurrentBlock());
+    assertTrue(p1.getHasTrain());
  ); 
  
  public testMoveTrainWithStations : () ==> () 

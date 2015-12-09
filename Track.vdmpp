@@ -164,17 +164,20 @@ operations
 	moveTrain(t) == (
 		dcl b: Block := t.getCurrentBlock();
 		dcl nb: Block := getNextBlock(t);
+		dcl pb: Block := getPreviousBlock(t);
 	
 		if(t.getDirection()) then ( -- semaphores 1
 			if(nb.getSemaphore1() = <RED>) then (
-				askToLeaveStation(t);
+				if b.isStation() then (
+					askToLeaveStation(t)
+				) else return false;
 			)
 			else (			
 				t.setCurrentBlock(nb);
 				b.setHasTrain(false);
 				
 				b.setSemaphore1(<YELLOW>);
-				nb.setSemaphore1(<RED>);
+				pb.setSemaphore1(<GREEN>);
 				
 				if(b.isStation()) then (
 					changeSemaphoresToRed(t);
@@ -185,23 +188,23 @@ operations
 		)
 		else ( --semaphores 2
 			if(nb.getSemaphore2() = <RED>) then (
-				askToLeaveStation(t);
+				if b.isStation() then (
+					askToLeaveStation(t)
+				) else return false;
 			)
 			else (			
 				t.setCurrentBlock(nb);
 				b.setHasTrain(false);
 				
 				b.setSemaphore2(<YELLOW>);
-				nb.setSemaphore2(<RED>);
+				pb.setSemaphore2(<GREEN>);
 				
 				if(b.isStation()) then (
 					changeSemaphoresToRed(t);
-				);
-				
+				);	
 				return true
 			)
 		)
-
 	);
 	
 	/**
@@ -241,7 +244,6 @@ operations
 					return track(b.getIndexInTrack()-1);	
 				)
 			)
-		
 	);
 		
 	/**
@@ -251,7 +253,6 @@ operations
 	*
 	*	return nextIndex
 	*/
-	
 	pure public getNextBlockIndex : nat1 * bool ==> nat1 
 	getNextBlockIndex(currentIndex,direction) == (
 	
@@ -283,9 +284,84 @@ operations
 					return currentIndex-1;	
 				)
 			)
-		
 	);
 		
+ /**
+	* Get previous block 
+	* @param t train
+	*/
+	pure public getPreviousBlock : Train ==> Block 
+	getPreviousBlock(t) == (
+			dcl b : Block := t.getCurrentBlock();
+	
+			if(not t.getDirection()) then (
+				if(b.isStation() and  b.getIndexInTrack() >= (len track-1)) then (
+					return track(1);
+				)
+				else if(b.getIndexInTrack() >= len track ) then (
+					return track(1);
+				)
+				else if(t.getCurrentBlock().isStation()) then ( -- is station
+					return track(b.getIndexInTrack()+2);
+				)
+				else ( 
+					return track(b.getIndexInTrack()+1);	
+				)
+			)
+			else (
+				if(b.isStation() and  b.getIndexInTrack() = 2) then (
+					return track(len track);
+				)
+				else if(b.getIndexInTrack() = 1) then (
+					return track(len track);
+				)	
+				else if(t.getCurrentBlock().isStation()) then ( -- is station
+					return track(b.getIndexInTrack()-2);
+				)
+				else ( 
+					return track(b.getIndexInTrack()-1);	
+				)
+			)
+	);
+		
+	/**
+	* Get previous block index
+	* @param currentIndex nat1
+	* @param drection bool
+	*
+	*	return previousIndex
+	*/
+	pure public getPreviousBlockIndex : nat1 * bool ==> nat1 
+	getPreviousBlockIndex(currentIndex,direction) == (
+			if(not direction) then (
+				if(track(currentIndex).isStation() and  currentIndex >= (len track-1)) then (
+					return 1;
+				)
+				else if(currentIndex >= len track ) then (
+					return 1;
+				)
+				else if(track(currentIndex).isStation()) then ( -- is station
+					return currentIndex+2;
+				)
+				else ( 
+					return currentIndex+1;	
+				)
+			)
+			else (
+				if(track(currentIndex).isStation() and currentIndex = 2) then (
+					return len track;
+				)
+				else if(currentIndex = 1) then (
+					return len track;
+				)	
+				else if(track(currentIndex).isStation()) then ( -- is station
+					return currentIndex-2;
+				)
+				else ( 
+					return currentIndex-1;	
+				)
+			)
+	);
 	
 
 functions
