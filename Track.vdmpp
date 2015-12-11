@@ -1,5 +1,5 @@
 
--- inv -> index on track
+-- ++ inv -> index on track
 -- inv -> hastrain and currentBlock
 -- ++ ter set of trains na track, inv -> n pode haver 2 comboios no mm block
 -- ++ pre -> setCurrentblock, check has train
@@ -18,8 +18,10 @@ instance variables
 	private trains: [seq of Train] := [];
 	
 	inv not twoTrainsInSameBlock(trains);
+	inv not hasDuplicatesIndexInTrack(track);
 	inv not hasDuplicates[Train](trains);
-	inv not hasDuplicates[Block](track); 
+	inv not hasDuplicates[Block](track);
+	inv currentBlockOnTrains(trains); 
 	inv len trains <= len track;
 	
 operations
@@ -49,8 +51,8 @@ operations
 	*/
 	public addBlockToTrack : Block ==> ()
 	addBlockToTrack(block) == (
-		track := track ^ [block];
-		block.setIndexInTrack(len track)
+		block.setIndexInTrack(len track + 1);
+		track := track ^ [block]
 	);
 	
 	/**
@@ -393,13 +395,35 @@ operations
 pure private twoTrainsInSameBlock: seq of Train ==> bool
 twoTrainsInSameBlock(t) ==
 	return exists i, j in set inds t &i <> j and t(i).getCurrentBlock() = t(j).getCurrentBlock();
+
+/**
+ * Check if there are two blocks with the same index in track
+ * @params b seq of blocks
+ * @return true if there are two blocks with the same index in track
+ */		
+pure private hasDuplicatesIndexInTrack: seq of Block ==> bool
+hasDuplicatesIndexInTrack(b) ==
+	return exists i, j in set inds b &i <> j and b(i).getIndexInTrack() = b(j).getIndexInTrack();
+	
+	/**
+ * Check if there are all blocks that have a train, have the hasTrain set at true
+ * @params b seq of trains
+ * @return the result
+ */		
+pure private currentBlockOnTrains: seq of Train ==> bool
+currentBlockOnTrains(t) ==
+		return forall i in set inds t &t(i).getCurrentBlock().getHasTrain()= true;
 	
 functions
-
+/**
+ * Check if there are duplicate objects
+ * @params s seq of objects
+ * @return true if there are duplicate objects
+ */
 hasDuplicates[@T]: seq of @T+> bool
 hasDuplicates(s) ==
 	exists i, j in set inds s &i <> j and s(i) = s(j);
-
+	
 traces
 -- TODO Define Combinatorial Test Traces here
 end Track

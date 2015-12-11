@@ -376,7 +376,18 @@ testSemaphores() == (
     assertEqual(<RED>, track.getTrack()(3).getSemaphore2());    
     assertEqual(<RED>, track.getTrack()(4).getSemaphore2());    
     assertEqual(<RED>, track.getTrack()(5).getSemaphore2());
-);  
+);
+
+public runAllTests : () ==> ()
+runAllTests() == (
+	testCreateBlock();
+	testCreateTrack();
+	testMoveTrainWithStations();
+	testStation();
+	testTrainWaiting();
+	testAvoidingCollision();
+	testSemaphores();
+);
 	
 functions
 -- TODO Define functiones here

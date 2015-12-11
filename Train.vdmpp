@@ -14,6 +14,7 @@ instance variables
 	private direction: bool; -- true: forward, false: backward
 	private currentBlock: [Block] := nil;
 
+	inv currentBlockHasTrain();
 operations
 
 	/**
@@ -76,15 +77,20 @@ operations
 	 */
 	public setCurrentBlock : Block ==> ()
 	setCurrentBlock(b) == (
+		b.setHasTrain(true);
 		currentBlock := b;
 		b.setSemaphore1(<RED>);
-		b.setSemaphore2(<RED>);	
-		b.setHasTrain(true)
+		b.setSemaphore2(<RED>)
 	)
 	pre if(direction) then b.getSemaphore1() <> <RED>
 	else b.getSemaphore2() <> <RED> and
 	b.getHasTrain() = false
 	post currentBlock = b and currentBlock.getHasTrain() = true;
+
+pure private currentBlockHasTrain : () ==> bool
+currentBlockHasTrain() == (
+	return (self.currentBlock = nil or self.currentBlock.getHasTrain())
+);
 
 functions
 -- TODO Define functiones here
