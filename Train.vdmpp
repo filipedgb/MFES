@@ -82,7 +82,8 @@ operations
 		b.setHasTrain(true)
 	)
 	pre if(direction) then b.getSemaphore1() <> <RED>
-	else b.getSemaphore2() <> <RED>
+	else b.getSemaphore2() <> <RED> and
+	b.getHasTrain() = false
 	post currentBlock = b and currentBlock.getHasTrain() = true;
 
 functions

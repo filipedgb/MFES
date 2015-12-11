@@ -1,3 +1,8 @@
+
+-- inv -> index on track
+-- inv -> hastrain and currentBlock
+-- ++ ter set of trains na track, inv -> n pode haver 2 comboios no mm block
+-- ++ pre -> setCurrentblock, check has train
 class Track
 /*
   Defines a sequence of blocks.
@@ -5,13 +10,18 @@ class Track
 */
 types
 	
-	
 values
 -- TODO Define values here
 instance variables
 	-- track is circular	
 	private track: [seq of Block] := [];
-
+	private trains: [seq of Train] := [];
+	
+	inv not twoTrainsInSameBlock(trains);
+	inv not hasDuplicates[Train](trains);
+	inv not hasDuplicates[Block](track); 
+	inv len trains <= len track;
+	
 operations
 	/**
 	 * Track constructor without blocks
@@ -43,7 +53,23 @@ operations
 		block.setIndexInTrack(len track)
 	);
 	
+	/**
+	* Getter for the trains
+	* @return trains
+	*/
+	pure public getTrains : () ==> seq of Train
+	getTrains() == (
+		return self.trains
+	);
 	
+	/**
+	* Adds train to the trains
+	* @param t train to add
+	*/
+	public addTrainToTrains : Train ==> ()
+	addTrainToTrains(t) == (
+		trains := trains ^ [t];
+	);
 	
 	public changeSemaphoresToRed : Train ==> ()
 	changeSemaphoresToRed(t) == (
@@ -52,7 +78,6 @@ operations
 		dcl direction: bool := t.getDirection();
 		dcl index: nat1 := initialIndex;
 		
-				
 		if t.getDirection() then ( -- clockwise
 			while track(index).isStation() = false do (
 				track(index).setSemaphore2(<RED>);
@@ -106,7 +131,6 @@ operations
 				index := getNextBlockIndex(index,direction);
 			)
 		)
-	
 	);
 	
 	public askToLeaveStation: Train ==> bool
@@ -150,11 +174,9 @@ operations
 			changeSemaphoresToGreen(t);
 			moveTrain(t);
 		)
-	
 	)
 	pre t.getCurrentBlock().isStation();	
 		
-	
 	/**
 	* Moves train on block according to the direction and position of the train
 	* @param t train
@@ -362,10 +384,22 @@ operations
 				)
 			)
 	);
-	
 
+/**
+ * Check if there are two trains in the same block
+ * @params t seq of trains
+ * @return true if there are two trains in the same block
+ */	
+pure private twoTrainsInSameBlock: seq of Train ==> bool
+twoTrainsInSameBlock(t) ==
+	return exists i, j in set inds t &i <> j and t(i).getCurrentBlock() = t(j).getCurrentBlock();
+	
 functions
--- TODO Define functiones here
+
+hasDuplicates[@T]: seq of @T+> bool
+hasDuplicates(s) ==
+	exists i, j in set inds s &i <> j and s(i) = s(j);
+
 traces
 -- TODO Define Combinatorial Test Traces here
 end Track
