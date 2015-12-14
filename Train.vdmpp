@@ -8,7 +8,6 @@ types
 values
 -- TODO Define values here
 instance variables
-	private moving: bool;
 	private direction: bool; -- true: forward, false: backward
 	private currentBlock: [Block] := nil;
 
@@ -23,9 +22,8 @@ operations
 	 * 
 	 * @return Train with auto-incremental id and the moving state set to the param value
 	 */
-	public Train : bool * bool ==> Train
-	Train(movingIn,directionIn) == (
-		moving := movingIn;
+	public Train : bool ==> Train
+	Train(directionIn) == (
 		direction := directionIn;
 		return self
 	);
@@ -45,15 +43,6 @@ operations
 	 */
 	public setDirection : bool ==> ()
 	setDirection(d) == direction := d;
-	
-	
-	/**
-	 * Getter for the moving state of the train.
-	 *
-	 * @return the moving state of the train
-	 */
-	pure public isMoving : () ==> bool
-	isMoving() == return self.moving;
 	
 	pure public getCurrentBlock : () ==> Block
 	getCurrentBlock() == return self.currentBlock;
@@ -75,10 +64,10 @@ operations
 	b.getHasTrain() = false
 	post currentBlock = b and currentBlock.getHasTrain() = true;
 
-pure private currentBlockHasTrain : () ==> bool
-currentBlockHasTrain() == (
+	pure private currentBlockHasTrain : () ==> bool
+	currentBlockHasTrain() == (
 	return (self.currentBlock = nil or self.currentBlock.getHasTrain())
-);
+	);
 
 functions
 -- TODO Define functiones here

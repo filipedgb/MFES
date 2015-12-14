@@ -56,8 +56,8 @@ operations
     dcl p5: Block := new Block(<YELLOW>,<YELLOW>);
     dcl p6: Block := new Block(<YELLOW>,<YELLOW>);
     dcl track: Track := new Track();
-    dcl trainForward: Train := new Train(true,true);
-    dcl trainBackward: Train := new Train(true,false);
+    dcl trainForward: Train := new Train(true);
+    dcl trainBackward: Train := new Train(false);
     dcl dummy: bool := false;
     
     track.addBlockToTrack(p1);
@@ -120,8 +120,8 @@ operations
     dcl p6: Block := new Block(<YELLOW>,<YELLOW>);
     dcl dummy: bool := false;  
     dcl track: Track := new Track();
-    dcl trainForward: Train := new Train(true,true);
-    dcl trainBackward: Train := new Train(true,false);
+    dcl trainForward: Train := new Train(true);
+    dcl trainBackward: Train := new Train(false);
     
     p3.setStation(true);
     p4.setStation(true);
@@ -198,8 +198,8 @@ operations
     
     dcl track: Track := new Track();
     
-    dcl trainForward: Train := new Train(true,true);
-    dcl trainBackward: Train := new Train(true,false);
+    dcl trainForward: Train := new Train(true);
+    dcl trainBackward: Train := new Train(false);
         
     p3.setStation(true);
     p4.setStation(true);
@@ -276,9 +276,9 @@ operations
     
     dcl track: Track := new Track();
     
-    dcl trainForward: Train := new Train(true,true);
-    dcl trainBackward: Train := new Train(true,false);
-    dcl trainBackward2: Train := new Train(true,false);
+    dcl trainForward: Train := new Train(true);
+    dcl trainBackward: Train := new Train(false);
+    dcl trainBackward2: Train := new Train(false);
     
     p3.setStation(true);
     p4.setStation(true);
@@ -353,7 +353,7 @@ testSemaphores() == (
     
     dcl track: Track := new Track();
     dcl dummy: bool := false;
-    dcl trainForward: Train := new Train(true,true);
+    dcl trainForward: Train := new Train(true);
           
     p1.setStation(true);
     p2.setStation(true);   
@@ -368,16 +368,35 @@ testSemaphores() == (
     
     track.addTrainToTrains(trainForward);
        
-    dummy := track.moveTrain(trainForward); -- p1 -> p2
+    dummy := track.moveTrain(trainForward); -- p1 -> p3
     
     assertEqual(<YELLOW>, track.getTrack()(1).getSemaphore1());    
     assertEqual(<RED>, track.getTrack()(3).getSemaphore1());    
     assertEqual(<GREEN>, track.getTrack()(4).getSemaphore1());    
-    assertEqual(<GREEN>, track.getTrack()(5).getSemaphore1());    
+    assertEqual(<GREEN>, track.getTrack()(5).getSemaphore1());
+    
+    dummy := track.moveTrain(trainForward); -- p3 -> p4    
 
-    assertEqual(<RED>, track.getTrack()(3).getSemaphore2());    
+		assertEqual(<YELLOW>, track.getTrack()(1).getSemaphore1());
+    assertEqual(<YELLOW>, track.getTrack()(3).getSemaphore1());    
+    assertEqual(<RED>, track.getTrack()(4).getSemaphore1());
     assertEqual(<RED>, track.getTrack()(4).getSemaphore2());    
+    assertEqual(<GREEN>, track.getTrack()(5).getSemaphore1());
+    
+    dummy := track.moveTrain(trainForward); -- p4 -> p5    
+
+		assertEqual(<YELLOW>, track.getTrack()(1).getSemaphore1());
+    assertEqual(<GREEN>, track.getTrack()(3).getSemaphore1());    
+    assertEqual(<YELLOW>, track.getTrack()(4).getSemaphore1());
+    assertEqual(<RED>, track.getTrack()(5).getSemaphore1());
     assertEqual(<RED>, track.getTrack()(5).getSemaphore2());
+    
+    dummy := track.moveTrain(trainForward); -- p5 -> p1    
+
+		assertEqual(<RED>, track.getTrack()(1).getSemaphore1());    
+    assertEqual(<GREEN>, track.getTrack()(4).getSemaphore1());
+    assertEqual(<YELLOW>, track.getTrack()(5).getSemaphore1());
+    assertEqual(<RED>, track.getTrack()(5).getSemaphore2());    
 );
 
 public runAllTests : () ==> ()
