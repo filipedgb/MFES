@@ -113,6 +113,9 @@ operations
     ret := dunion {ret,{track(index)}};
     index := getNextBlockIndex(index,t.getDirection());
   );
+  
+  return ret
+ );
 	
 	/*
 	* Changes semaphores to green between stations, used in askToLeaveStation
@@ -147,7 +150,8 @@ operations
 				index := getNextBlockIndex(index,direction);
 			)
 		)
-	);
+	)post if(t.getDirection()) then forall i in set getBlocksBetween(t) & i.getSemaphore1() = <GREEN>
+     else forall i in set getBlocksBetween(t) & i.getSemaphore2() = <GREEN>;
 	
 	/**
 	* Train when in a station, asks if it can leave the station
