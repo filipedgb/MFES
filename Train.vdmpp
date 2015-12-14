@@ -1,8 +1,8 @@
-class Train
 /*
-  Defines a train.
-  FEUP, MFES, 2015/16.
-*/
+ * Defines a train.
+ * FEUP, MFES, 2015/16.
+ */
+class Train
 types
 
 values
@@ -16,10 +16,8 @@ operations
 
 	/**
 	 * Train constructor.
-	 *
 	 * @param movingIn - the state of the train (moving or stopped)
 	 * @param directionIn - the direction of the train (forward or backward)
-	 * 
 	 * @return Train with auto-incremental id and the moving state set to the param value
 	 */
 	public Train : bool ==> Train
@@ -30,20 +28,22 @@ operations
 	
 	/**
 	 * Getter for the Train direction.
-	 *
 	 * @return train direction
 	 */
 	pure public getDirection : () ==> bool
 	getDirection() == return self.direction;
 	
-		/**
+	/**
 	 * Setter for the Train direction.
-	 *
 	 * @param train direction
 	 */
 	public setDirection : bool ==> ()
 	setDirection(d) == direction := d;
 	
+	/**
+	 * Getter for the current block of train
+	 * @return current block
+	 */
 	pure public getCurrentBlock : () ==> Block
 	getCurrentBlock() == return self.currentBlock;
 	
@@ -64,6 +64,9 @@ operations
 	b.getHasTrain() = false
 	post currentBlock = b and currentBlock.getHasTrain() = true;
 
+ /**
+ * Checks if current block of train has hasTrain = true;
+ */
 	pure private currentBlockHasTrain : () ==> bool
 	currentBlockHasTrain() == (
 	return (self.currentBlock = nil or self.currentBlock.getHasTrain())

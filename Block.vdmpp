@@ -1,8 +1,8 @@
-class Block
 /*
-  Defines a piece of track.
-  FEUP, MFES, 2015/16.
-*/
+ * Defines a piece of track.
+ * FEUP, MFES, 2015/16.
+ */
+class Block
 types
 	public Semaphore = <RED>|<YELLOW>|<GREEN>;
 	public String = seq of char;

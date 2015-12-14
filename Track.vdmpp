@@ -1,15 +1,9 @@
-
--- ++ inv -> index on track
--- inv -> hastrain and currentBlock
--- ++ ter set of trains na track, inv -> n pode haver 2 comboios no mm block
--- ++ pre -> setCurrentblock, check has train
-class Track
 /*
-  Defines a sequence of blocks.
-  FEUP, MFES, 2015/16.
-*/
-types
-	
+ * Defines a sequence of blocks.
+ * FEUP, MFES, 2015/16.
+ */
+class Track
+types	
 values
 -- TODO Define values here
 instance variables
@@ -73,6 +67,11 @@ operations
 		trains := dunion {trains,{t}};
 	);
 	
+	/**
+	* When leaving a station, puts all semaphores, between that station and
+	* the next, in the opposite direction to red
+	* @param Train
+	*/
 	public changeSemaphoresToRed : Train ==> ()
 	changeSemaphoresToRed(t) == (
 		dcl b: Block := t.getCurrentBlock();
@@ -104,6 +103,10 @@ operations
 		)
 	);
 	
+	/*
+	* Changes semaphores to green between stations, used in askToLeaveStation
+	* @return Train
+	*/
 	public changeSemaphoresToGreen: Train ==> ()
 	changeSemaphoresToGreen(t) == (
 		dcl b: Block := t.getCurrentBlock();
@@ -135,7 +138,12 @@ operations
 		)
 	);
 	
-			
+	/**
+	* Train when in a station, asks if it can leave the station
+	* If so, semaphore turns green, and train moves
+	* @param Train
+	* @return bool
+	*/
 	public askToLeaveStation: Train ==> bool
 	askToLeaveStation(t) == (
 		dcl b: Block := t.getCurrentBlock();
@@ -185,7 +193,6 @@ operations
 	* Moves train on block according to the direction and position of the train
 	* @param t train
 	*/
-	-- falta ver os semaforos [n sei se vai ser para ver aqui]
 	public moveTrain : Train ==> bool
 	moveTrain(t) == (
 		dcl b: Block := t.getCurrentBlock();
@@ -238,7 +245,6 @@ operations
 				if(b.isStation()) then (
 					changeSemaphoresToRed(t);
 					b.setSemaphore2(<YELLOW>)
-					
 				);	
 				return true
 			)
@@ -249,7 +255,6 @@ operations
 	* Get next block 
 	* @param t train
 	*/
-	
 	pure public getNextBlock : Train ==> Block 
 	getNextBlock(t) == (
 			dcl b : Block := t.getCurrentBlock();
@@ -418,18 +423,14 @@ pure private hasDuplicatesIndexInTrack: seq of Block ==> bool
 hasDuplicatesIndexInTrack(b) ==
 	return exists i, j in set inds b &i <> j and b(i).getIndexInTrack() = b(j).getIndexInTrack();
 	
-	/**
+/**
  * Check if there are all blocks that have a train, have the hasTrain set at true
  * @params b seq of trains
  * @return the result
  */		
 pure private currentBlockOnTrains: set of Train ==> bool
 currentBlockOnTrains(t) ==
-		return forall i in set t & i.getCurrentBlock().getHasTrain()= true;
-		
-		/*pre forall sc1, sc2 in set gp &
-sc1 <> sc2 <=> sc1.team <> sc2.team
-and {wt,lt} subset {sc.team | sc in set gp}*/
+	return forall i in set t & i.getCurrentBlock().getHasTrain()= true;
 	
 functions
 /**
@@ -449,7 +450,6 @@ hasDuplicates(s) ==
 hasDuplicatesSet[@T]: set of @T+> bool
 hasDuplicatesSet(s) ==
 	exists i, j in set s & i <> j and i = j;
-	
 		
 traces
 -- TODO Define Combinatorial Test Traces here

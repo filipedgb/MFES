@@ -1,8 +1,8 @@
-class TestRailway is subclass of MyTestCase
 /*
-  Class for testing the railway system.
-  FEUP, MFES, 2015/16.
-*/
+ * Class for testing the railway system.
+ * FEUP, MFES, 2015/16.
+ */
+class TestRailway is subclass of MyTestCase
 types
 -- TODO Define types here
 values
@@ -53,6 +53,22 @@ operations
   	assertEqual(6, p5.getIndexInTrack());   	
  );
  
+ /**
+ * Test create station
+ */
+ public testStation : () ==> ()
+ testStation() == (
+ 		dcl p1: Block := new Block(<GREEN>,<GREEN>);
+    dcl p2: Block := new Block(<GREEN>,<GREEN>);
+ 
+ 		p1.setStation(true);
+    assertTrue(p1.isStation());    
+    assertTrue(not p2.isStation());
+ );
+  
+ /**
+ * Test if train moves
+ */
  public testMoveTrain : () ==> () 
  testMoveTrain() == (
  		dcl p1: Block := new Block(<YELLOW>,<YELLOW>);
@@ -116,6 +132,9 @@ operations
     assertTrue(p1.getHasTrain());
  ); 
  
+ /*
+ * Test if train moves between stations
+ */
  public testMoveTrainWithStations : () ==> () 
  testMoveTrainWithStations() == (
  		dcl p1: Block := new Block(<YELLOW>,<YELLOW>);
@@ -177,17 +196,11 @@ operations
     assertEqual(p3, trainForward.getCurrentBlock());      
     assertEqual(p2, trainBackward.getCurrentBlock());
  ); 
-  
- public testStation : () ==> ()
- testStation() == (
- 		dcl p1: Block := new Block(<GREEN>,<GREEN>);
-    dcl p2: Block := new Block(<GREEN>,<GREEN>);
  
- 		p1.setStation(true);
-    assertTrue(p1.isStation());    
-    assertTrue(not p2.isStation());
- );
- 
+ /*
+ * Test if train waits in station until semaphore is green (no trains 
+ * in the opposite direction)
+ */  
  public testTrainWaiting : () ==> () 
  testTrainWaiting() == (
  		dcl p1: Block := new Block(<GREEN>,<GREEN>);
@@ -265,6 +278,9 @@ operations
     assertEqual(<RED>, track.getTrack()(5).getSemaphore2());
  ); 
 
+ /**
+ * Test if trains, when moving, avoid collision
+ */
  public testAvoidingCollision : () ==> () 
  testAvoidingCollision() == (
  		dcl p1: Block := new Block(<GREEN>,<GREEN>);
@@ -349,8 +365,11 @@ operations
     assertEqual(<RED>, track.getTrack()(5).getSemaphore2());
  );   
   
-public testSemaphores : () ==> ()   
-testSemaphores() == (
+  /**
+  * Test if semaphores are working correctly
+  */
+	public testSemaphores : () ==> ()   
+	testSemaphores() == (
 		dcl p1: Block := new Block(<GREEN>,<GREEN>);
     dcl p2: Block := new Block(<GREEN>,<GREEN>);
     dcl p3: Block := new Block(<GREEN>,<GREEN>);
@@ -405,16 +424,19 @@ testSemaphores() == (
     assertEqual(<RED>, track.getTrack()(5).getSemaphore2());    
 );
 
-public runAllTests : () ==> ()
-runAllTests() == (
-	testCreateBlock();
-	testCreateTrack();
-	testMoveTrain();
-	testMoveTrainWithStations();
-	testStation();
-	testTrainWaiting();
-	testAvoidingCollision();
-	testSemaphores();
+	/**
+	* Runs all tests
+	*/
+	public runAllTests : () ==> ()
+	runAllTests() == (
+		testCreateBlock();
+		testCreateTrack();
+		testMoveTrain();
+		testMoveTrainWithStations();
+		testStation();
+		testTrainWaiting();
+		testAvoidingCollision();
+		testSemaphores();
 );
 	
 functions
