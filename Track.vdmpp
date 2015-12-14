@@ -101,7 +101,18 @@ operations
 				index := getNextBlockIndex(index,direction);
 			)
 		)
-	);
+	) post if(t.getDirection()) then forall i in set getBlocksBetween(t) & i.getSemaphore2() = <RED>
+     else forall i in set getBlocksBetween(t) & i.getSemaphore1() = <RED>;
+ 
+ pure public getBlocksBetween: Train ==> set of Block 
+ getBlocksBetween(t)==(
+  dcl ret: set of Block := {};
+  dcl index: nat1 := t.getCurrentBlock().getIndexInTrack();
+    
+  while track(index).isStation() = false do (
+    ret := dunion {ret,{track(index)}};
+    index := getNextBlockIndex(index,t.getDirection());
+  );
 	
 	/*
 	* Changes semaphores to green between stations, used in askToLeaveStation
