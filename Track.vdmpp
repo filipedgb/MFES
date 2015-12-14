@@ -47,7 +47,7 @@ operations
 	addBlockToTrack(block) == (
 		block.setIndexInTrack(len track + 1);
 		track := track ^ [block]
-	);
+	) post len track > len track~ and block.getIndexInTrack() = len track;
 	
 	/**
 	* Getter for the trains
@@ -65,7 +65,7 @@ operations
 	public addTrainToTrains : Train ==> ()
 	addTrainToTrains(t) == (
 		trains := dunion {trains,{t}};
-	);
+	) post card trains > card trains~;
 	
 	/**
 	* When leaving a station, puts all semaphores, between that station and
@@ -78,7 +78,6 @@ operations
 		dcl initialIndex: nat1 := b.getIndexInTrack();
 		dcl direction: bool := t.getDirection();
 		dcl index: nat1 := initialIndex;
-		dcl blocksBetween: seq of Block;
 		
 		if t.getDirection() then ( -- clockwise
 			while track(index).isStation() = false do (
@@ -102,12 +101,6 @@ operations
 				index := getNextBlockIndex(index,direction);
 			)
 		)
-	) post checkSemaphores(t);
-	
-	pure public checkSemaphores: Train ==> bool
-	checkSemaphores(t) == ( 
-			IO`println(") set to RED ");
-			return true;
 	);
 	
 	/*
@@ -259,8 +252,6 @@ operations
 	)	pre t in set trains
 		post t in set trains;
 	
-	
-	
 	/**
 	* Get next block 
 	* @param t train
@@ -298,7 +289,7 @@ operations
 				)
 			)
 	) 
-	pre t in set trains
+	pre len track > 0 and t in set trains
 	post RESULT in set elems track;
 	
 		
@@ -340,7 +331,7 @@ operations
 					return currentIndex-1;	
 				)
 			)
-	) pre currentIndex > 0 and currentIndex <= len track
+	) pre len track > 0 and currentIndex > 0 and currentIndex <= len track
 		post RESULT > 0 and RESULT <= len track;
 		
  /**
@@ -378,7 +369,7 @@ operations
 					return track(b.getIndexInTrack()+1);	
 				)
 			)
-	)	pre t in set trains
+	)	pre len track > 0 and t in set trains
 		post RESULT in set elems track;
 	
 		
@@ -419,7 +410,7 @@ operations
 					return currentIndex-1;	
 				)
 			)
-	) pre currentIndex > 0 and currentIndex <= len track
+	) pre len track > 0 and currentIndex > 0 and currentIndex <= len track
 		post RESULT > 0 and RESULT <= len track;
 
 /**

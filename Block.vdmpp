@@ -36,8 +36,8 @@ operations
 	 */
 	public setSemaphore1 : Semaphore ==> ()
 	setSemaphore1(stateIn) == (
-				semaphores("cw") := stateIn;
-	);
+			semaphores("cw") := stateIn;
+	) post semaphores("cw") = stateIn;
 		
 	/**
 	 * Setter for the semaphore 2 (counter-clockwise/backward direction) state.
@@ -45,8 +45,8 @@ operations
 	 */
 	public setSemaphore2 : Semaphore ==> ()
 	setSemaphore2(stateIn) == (
-				semaphores("ccw") := stateIn;
-	); 
+			semaphores("ccw") := stateIn;
+	) post semaphores("ccw") = stateIn; 
 	
 	
 	/**
@@ -81,7 +81,7 @@ operations
 	public setIndexInTrack : nat1 ==> ()
 	setIndexInTrack(i) == (
 		indexInTrack := i;
-	);
+	) post indexInTrack = i;
 	
 	/**
 	 * Check if block has train
@@ -99,7 +99,7 @@ operations
 	public setHasTrain : bool ==> ()
 	setHasTrain(h) == (
 		hasTrain := h
-	);
+	) post hasTrain = h;
 	
  /**
 	 * Setter for being part of station
@@ -109,7 +109,7 @@ operations
 	public setStation : bool ==> ()
 	setStation(s) == (
 		isPartOfStation := s
-	);
+	) post isPartOfStation = s;
 	
  /**
 	 * Check if block is part of a station

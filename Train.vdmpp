@@ -38,7 +38,8 @@ operations
 	 * @param train direction
 	 */
 	public setDirection : bool ==> ()
-	setDirection(d) == direction := d;
+	setDirection(d) == direction := d
+	post direction = d;
 	
 	/**
 	 * Getter for the current block of train
@@ -62,15 +63,15 @@ operations
 	pre if(direction) then b.getSemaphore1() <> <RED>
 	else b.getSemaphore2() <> <RED> and
 	b.getHasTrain() = false
-	post currentBlock = b and currentBlock.getHasTrain() = true;
+	post currentBlock = b and currentBlock.getHasTrain() = true and 
+	b.getSemaphore1() = <RED> and b.getSemaphore2() = <RED>;
 
  /**
  * Checks if current block of train has hasTrain = true;
  */
 	pure private currentBlockHasTrain : () ==> bool
 	currentBlockHasTrain() == (
-	return (self.currentBlock = nil or self.currentBlock.getHasTrain())
-	);
+	return (self.currentBlock = nil or self.currentBlock.getHasTrain()));
 
 functions
 -- TODO Define functiones here
