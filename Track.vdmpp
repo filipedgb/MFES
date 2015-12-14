@@ -170,9 +170,13 @@ operations
 				t.setCurrentBlock(nb);
 				b.setHasTrain(false);
 				
-				b.setSemaphore1(<YELLOW>);
-				if(not pb.isStation()) then
+				if(not b.isStation()) then
+					b.setSemaphore1(<YELLOW>)
+				else b.setSemaphore1(<RED>);
+				
+				if(not pb.isStation()) then (
 					pb.setSemaphore1(<GREEN>);
+				);
 				
 				if(b.isStation()) then (
 					changeSemaphoresToRed(t);
@@ -191,7 +195,10 @@ operations
 				t.setCurrentBlock(nb);
 				b.setHasTrain(false);
 				
-				b.setSemaphore2(<YELLOW>);
+				if(not b.isStation()) then
+					b.setSemaphore2(<YELLOW>)
+				else b.setSemaphore2(<RED>);
+				
 				if(not pb.isStation()) then
 					pb.setSemaphore2(<GREEN>);
 				
@@ -404,8 +411,6 @@ hasDuplicates(s) ==
  * @params s set of objects
  * @return true if there are duplicate objects
  */
- 
- -- TODO THIS DOES NOT WORK
 hasDuplicatesSet[@T]: set of @T+> bool
 hasDuplicatesSet(s) ==
 	exists i, j in set s & i <> j and i = j;

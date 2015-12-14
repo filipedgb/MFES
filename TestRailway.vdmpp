@@ -10,6 +10,9 @@ values
 instance variables
 -- TODO Define instance variables here
 operations
+	/**
+	* Test for creating block
+	*/
 	public testCreateBlock : () ==> ()
   testCreateBlock() == (
     
@@ -18,6 +21,9 @@ operations
   	assertEqual(<YELLOW>, p.getSemaphore2());
   );
 	
+	/**
+	* Test for creating a track with blocks
+	*/
 	public testCreateTrack : () ==> ()
 	testCreateTrack() == (
     
