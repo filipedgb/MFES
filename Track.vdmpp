@@ -103,6 +103,38 @@ operations
 			)
 		)
 	);
+	
+	public changeSemaphoresToGreen: Train ==> ()
+	changeSemaphoresToGreen(t) == (
+		dcl b: Block := t.getCurrentBlock();
+		dcl initialIndex: nat1 := b.getIndexInTrack();
+		dcl direction: bool := t.getDirection();
+		dcl index: nat1 := getNextBlockIndex(initialIndex,direction);
+				
+		if t.getDirection() then ( -- clockwise
+			while	track(index).isStation() = false do (
+				track(index).setSemaphore1(<GREEN>);
+				
+				IO`print("CW Semaphore of track (");
+	  		IO`print(index); 
+	  		IO`println(") set to GREEN ");
+				
+				index := getNextBlockIndex(index,direction);
+			)
+		) 
+		else ( -- counterclockwise
+			while track(index).isStation() = false do (
+				track(index).setSemaphore2(<GREEN>);
+				
+				IO`print("CW Semaphore of track (");
+	  		IO`print(index); 
+	  		IO`println(") set to GREEN ");
+					
+				index := getNextBlockIndex(index,direction);
+			)
+		)
+	);
+	
 			
 	public askToLeaveStation: Train ==> bool
 	askToLeaveStation(t) == (
@@ -180,7 +212,8 @@ operations
 				
 				if(b.isStation()) then (
 					changeSemaphoresToRed(t);
-				);
+					b.setSemaphore1(<YELLOW>)
+					);
 				
 				return true
 			)
@@ -204,6 +237,8 @@ operations
 				
 				if(b.isStation()) then (
 					changeSemaphoresToRed(t);
+					b.setSemaphore2(<YELLOW>)
+					
 				);	
 				return true
 			)
