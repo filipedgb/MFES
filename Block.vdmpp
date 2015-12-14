@@ -5,16 +5,14 @@ class Block
 */
 types
 	public Semaphore = <RED>|<YELLOW>|<GREEN>;
-	
+	public String = seq of char;
 values
 -- TODO Define values here
 instance variables
-	private semaphoreState1: Semaphore;
-	private semaphoreState2: Semaphore;
+	private semaphores: map String to Semaphore := {"cw"	|-> <GREEN> , "ccw" |-> <GREEN>} ;
 	private hasTrain: bool := false;
 	private isPartOfStation: bool := false;
 	private indexInTrack: nat1 := 1;
---inv if(isPartOfStation) then (semaphoreState1 <> <GREEN>);
 operations
 	
 	/**
@@ -27,45 +25,45 @@ operations
 	 */
 		public Block : Semaphore * Semaphore ==> Block
 		Block(semaphoreStateIn1,semaphoreStateIn2) == (
-			semaphoreState1 := semaphoreStateIn1;
-			semaphoreState2 := semaphoreStateIn2;
+			semaphores("cw") := semaphoreStateIn1;
+			semaphores("ccw") := semaphoreStateIn2;
 			return self
 		);
 		
 /**
-	 * Setter for the semaphore 1.
+	 * Setter for the semaphore 1 (clockwise/forward direction) state.
 	 *
 	 */
 	public setSemaphore1 : Semaphore ==> ()
 	setSemaphore1(stateIn) == (
-			semaphoreState1 := stateIn;
+				semaphores("cw") := stateIn;
 	);
 		
-/**
-	 * Setter for the semaphore 2.
+	/**
+	 * Setter for the semaphore 2 (counter-clockwise/backward direction) state.
 	 *
 	 */
 	public setSemaphore2 : Semaphore ==> ()
 	setSemaphore2(stateIn) == (
-			semaphoreState2 := stateIn;
-	);
-		
+				semaphores("ccw") := stateIn;
+	); 
+	
 	
 	/**
-	 * Getter for the semaphore 1.
+	 * Getter for the semaphore 1 (clockwise/forward direction).
 	 *
-	 * @return the semaphore 1
+	 * @return the semaphore 1 state
 	 */
 	pure public getSemaphore1 : () ==> Semaphore
-	getSemaphore1() == return self.semaphoreState1;
+	getSemaphore1() == return self.semaphores("cw");
 		
 	/**
-	 * Getter for the semaphore 2.
+	 * Getter for the semaphore 2  (counter-clockwise/backward direction).
 	 *
-	 * @return the semaphore 2
+	 * @return semaphore 2 state
 	 */
 	pure public getSemaphore2 : () ==> Semaphore
-	getSemaphore2() == return self.semaphoreState2;
+	getSemaphore2() == return self.semaphores("ccw");
 	
 	/**
 	 * Getter for the index in track
