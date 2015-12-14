@@ -78,6 +78,7 @@ operations
 		dcl initialIndex: nat1 := b.getIndexInTrack();
 		dcl direction: bool := t.getDirection();
 		dcl index: nat1 := initialIndex;
+		dcl blocksBetween: seq of Block;
 		
 		if t.getDirection() then ( -- clockwise
 			while track(index).isStation() = false do (
@@ -101,6 +102,12 @@ operations
 				index := getNextBlockIndex(index,direction);
 			)
 		)
+	) post checkSemaphores(t);
+	
+	pure public checkSemaphores: Train ==> bool
+	checkSemaphores(t) == ( 
+			IO`println(") set to RED ");
+			return true;
 	);
 	
 	/*
@@ -187,7 +194,7 @@ operations
 			moveTrain(t);
 		)
 	)
-	pre t.getCurrentBlock().isStation();	
+	pre t.getCurrentBlock().isStation() and t in set trains;	
 		
 	/**
 	* Moves train on block according to the direction and position of the train
@@ -249,7 +256,10 @@ operations
 				return true
 			)
 		)
-	);
+	)	pre t in set trains
+		post t in set trains;
+	
+	
 	
 	/**
 	* Get next block 
@@ -287,7 +297,10 @@ operations
 					return track(b.getIndexInTrack()-1);	
 				)
 			)
-	);
+	) 
+	pre t in set trains
+	post RESULT in set elems track;
+	
 		
 	/**
 	* Get next block index
@@ -327,7 +340,8 @@ operations
 					return currentIndex-1;	
 				)
 			)
-	);
+	) pre currentIndex > 0 and currentIndex <= len track
+		post RESULT > 0 and RESULT <= len track;
 		
  /**
 	* Get previous block 
@@ -364,7 +378,9 @@ operations
 					return track(b.getIndexInTrack()+1);	
 				)
 			)
-	);
+	)	pre t in set trains
+		post RESULT in set elems track;
+	
 		
 	/**
 	* Get previous block index
@@ -403,7 +419,8 @@ operations
 					return currentIndex-1;	
 				)
 			)
-	);
+	) pre currentIndex > 0 and currentIndex <= len track
+		post RESULT > 0 and RESULT <= len track;
 
 /**
  * Check if there are two trains in the same block
