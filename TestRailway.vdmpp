@@ -75,6 +75,8 @@ operations
     track.addTrainToTrains(trainForward);
     track.addTrainToTrains(trainBackward);
         
+    assertEqual(card track.getTrains(),2);
+        
     assertEqual(p4, trainForward.getCurrentBlock());
     assertEqual(p3, trainBackward.getCurrentBlock());
     assertTrue(p4.getHasTrain());
@@ -382,6 +384,7 @@ public runAllTests : () ==> ()
 runAllTests() == (
 	testCreateBlock();
 	testCreateTrack();
+	testMoveTrain();
 	testMoveTrainWithStations();
 	testStation();
 	testTrainWaiting();

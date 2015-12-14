@@ -8,8 +8,6 @@ types
 values
 -- TODO Define values here
 instance variables
-	private static lastTrainId: nat := 0;
-	private trainId: nat;
 	private moving: bool;
 	private direction: bool; -- true: forward, false: backward
 	private currentBlock: [Block] := nil;
@@ -29,18 +27,8 @@ operations
 	Train(movingIn,directionIn) == (
 		moving := movingIn;
 		direction := directionIn;
-		trainId := lastTrainId;
-		lastTrainId := lastTrainId + 1;
 		return self
 	);
-	
-	/**
-	 * Getter for the Train ID.
-	 *
-	 * @return train id
-	 */
-	pure public getId : () ==> nat
-	getId() == return self.trainId;
 	
 	/**
 	 * Getter for the Train direction.

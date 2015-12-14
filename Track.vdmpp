@@ -14,15 +14,15 @@ values
 -- TODO Define values here
 instance variables
 	-- track is circular	
-	private track: [seq of Block] := [];
-	private trains: [seq of Train] := [];
+	private track: seq of Block := [];
+	private trains: set of Train := {};
 	
 	inv not twoTrainsInSameBlock(trains);
 	inv not hasDuplicatesIndexInTrack(track);
-	inv not hasDuplicates[Train](trains);
+	inv not hasDuplicatesSet[Train](trains);
 	inv not hasDuplicates[Block](track);
 	inv currentBlockOnTrains(trains); 
-	inv len trains <= len track;
+	inv card trains <= len track;
 	
 operations
 	/**
@@ -59,7 +59,7 @@ operations
 	* Getter for the trains
 	* @return trains
 	*/
-	pure public getTrains : () ==> seq of Train
+	pure public getTrains : () ==> set of Train
 	getTrains() == (
 		return self.trains
 	);
@@ -70,7 +70,7 @@ operations
 	*/
 	public addTrainToTrains : Train ==> ()
 	addTrainToTrains(t) == (
-		trains := trains ^ [t];
+		trains := dunion {trains,{t}};
 	);
 	
 	public changeSemaphoresToRed : Train ==> ()
@@ -392,9 +392,9 @@ operations
  * @params t seq of trains
  * @return true if there are two trains in the same block
  */	
-pure private twoTrainsInSameBlock: seq of Train ==> bool
+pure private twoTrainsInSameBlock: set of Train ==> bool
 twoTrainsInSameBlock(t) ==
-	return exists i, j in set inds t &i <> j and t(i).getCurrentBlock() = t(j).getCurrentBlock();
+	return exists i, j in set t &i <> j and i.getCurrentBlock() = j.getCurrentBlock();
 
 /**
  * Check if there are two blocks with the same index in track
@@ -410,9 +410,13 @@ hasDuplicatesIndexInTrack(b) ==
  * @params b seq of trains
  * @return the result
  */		
-pure private currentBlockOnTrains: seq of Train ==> bool
+pure private currentBlockOnTrains: set of Train ==> bool
 currentBlockOnTrains(t) ==
-		return forall i in set inds t &t(i).getCurrentBlock().getHasTrain()= true;
+		return forall i in set t & i.getCurrentBlock().getHasTrain()= true;
+		
+		/*pre forall sc1, sc2 in set gp &
+sc1 <> sc2 <=> sc1.team <> sc2.team
+and {wt,lt} subset {sc.team | sc in set gp}*/
 	
 functions
 /**
@@ -424,6 +428,18 @@ hasDuplicates[@T]: seq of @T+> bool
 hasDuplicates(s) ==
 	exists i, j in set inds s &i <> j and s(i) = s(j);
 	
+/**
+ * Check if there are duplicate objects
+ * @params s set of objects
+ * @return true if there are duplicate objects
+ */
+ 
+ -- TODO THIS DOES NOT WORK
+hasDuplicatesSet[@T]: set of @T+> bool
+hasDuplicatesSet(s) ==
+	exists i, j in set s & i <> j and i = j;
+	
+		
 traces
 -- TODO Define Combinatorial Test Traces here
 end Track
