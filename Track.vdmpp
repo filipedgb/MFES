@@ -164,7 +164,6 @@ operations
 		dcl b: Block := t.getCurrentBlock();
 		dcl initialIndex: nat1 := b.getIndexInTrack();
 		dcl direction: bool := t.getDirection();
-		dcl nb: Block := getNextBlock(t);
 		dcl index: nat1 := getNextBlockIndex(initialIndex,direction);
 	
 		IO`println("Can I leave station?");
@@ -182,7 +181,7 @@ operations
 			);
 		
 			IO`println("Yes, track is not busy");
-			nb.setSemaphore1(<GREEN>);
+			changeSemaphoresToGreen(t);
 			moveTrain(t);			
 		) 
 		else ( -- counterclockwise
@@ -198,7 +197,7 @@ operations
 			);
 			
 			IO`println("Yes, track is not busy");
-			nb.setSemaphore2(<GREEN>);
+			changeSemaphoresToGreen(t);
 			moveTrain(t);
 		)
 	)
