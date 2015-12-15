@@ -135,7 +135,6 @@ public class Track {
         Block b = t.getCurrentBlock();
         Number initialIndex = b.getIndexInTrack();
         Boolean direction = t.getDirection();
-        Block nb = getNextBlock(t);
         Number index = getNextBlockIndex(initialIndex, direction);
 
         if (t.getDirection()) {
@@ -156,7 +155,7 @@ public class Track {
                 index = getNextBlockIndex(index, direction);
             }
 
-            nb.setSemaphore1(MFES.quotes.GREENQuote.getInstance());
+            changeSemaphoresToGreen(t);
 
             return moveTrain(t);
         } else {
@@ -177,7 +176,7 @@ public class Track {
                 index = getNextBlockIndex(index, direction);
             }
 
-            nb.setSemaphore2(MFES.quotes.GREENQuote.getInstance());
+            changeSemaphoresToGreen(t);
 
             return moveTrain(t);
         }
